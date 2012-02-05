@@ -1,7 +1,7 @@
 (function() {
 
   $(document).ready(function() {
-    var $calendar, $timestampsOfOptions, editEvent, id, setupStartAndEndTimeFields, unixtimeToDate, updateMessage;
+    var $calendar, $timestampsOfOptions, id, setupStartAndEndTimeFields, unixtimeToDate, updateEvent, updateMessage;
     $calendar = $('#calendar');
     id = 10;
     unixtimeToDate = function(ut) {
@@ -10,7 +10,7 @@
       tD.setTime(tD.getTime() + (60 * 60 * 1000));
       return tD;
     };
-    editEvent = function(calEvent, $event) {
+    updateEvent = function(calEvent, $event) {
       var $dialogContent, bodyField, categoryField, endField, startField, titleField;
       $dialogContent = $("#event_edit_container");
       $dialogContent.find("input").val("");
@@ -52,7 +52,6 @@
                   calEvent.title = data.event.title;
                   calEvent.body = data.event.body;
                   calEvent.category = data.event.category;
-                  console.log(calEvent.start.toString());
                   $calendar.weekCalendar("removeUnsavedEvents");
                   $calendar.weekCalendar("updateEvent", calEvent);
                   return $dialogContent.dialog("close");
@@ -100,10 +99,39 @@
         }
       },
       eventNew: function(calEvent, $event) {
-        return editEvent(calEvent, $event);
+        return updateEvent(calEvent, $event);
       },
       eventClick: function(calEvent, $event) {
-        return editEvent(calEvent, $event);
+        return updateEvent(calEvent, $event);
+      },
+      eventResize: function(calEvent, $event) {
+        var post_data;
+        post_data = {
+          event_id: calEvent.id,
+          start: calEvent.start.toString().replace(/GMT.*$/, '').replace(/(^\s+|\s+$)/g, ''),
+          end: calEvent.end.toString().replace(/GMT.*$/, '').replace(/(^\s+|\s+$)/g, ''),
+          title: calEvent.title,
+          body: calEvent.body,
+          category: calEvent.category
+        };
+        return $.ajax({
+          data: post_data,
+          type: 'post',
+          url: '/calendar/event/update.json',
+          success: function(data) {
+            if (((data != null ? data.success : void 0) != null) && data.success === false) {
+              return $('<p>時間の変更の保存に失敗しました<br>リロードしてやり直してください</p>').dialog({
+                title: '保存に失敗しました',
+                height: 150,
+                buttons: {
+                  'リロードする': function() {
+                    return location.href = location.href;
+                  }
+                }
+              });
+            }
+          }
+        });
       },
       data: function(start, end, callback) {
         var post_data;

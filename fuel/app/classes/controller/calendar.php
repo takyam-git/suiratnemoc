@@ -18,6 +18,7 @@ class Controller_Calendar extends Controller_Base
 			'jquery-week-calendar/jquery.weekcalendar.css',
 			'jquery-week-calendar/skins/default.css',
 			'jquery-week-calendar/calendar.css',
+			'jquery-week-calendar/colors.css',
 		)));
 		
 		$this->template->set_safe('optionScripts', Asset::js(array(

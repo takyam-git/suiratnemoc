@@ -7,7 +7,7 @@ $(document).ready ->
     tD.setTime( tD.getTime() + (60*60*1000) );
     return tD;
   
-  editEvent = (calEvent, $event) ->
+  updateEvent = (calEvent, $event) ->
     $dialogContent = $("#event_edit_container");
     $dialogContent.find("input").val("");
     $dialogContent.find("textarea").val("");
@@ -48,8 +48,6 @@ $(document).ready ->
                 calEvent.body = data.event.body
                 calEvent.category = data.event.category
                 
-                console.log calEvent.start.toString()
-    
                 $calendar.weekCalendar("removeUnsavedEvents");
                 $calendar.weekCalendar("updateEvent", calEvent);
                 $dialogContent.dialog("close");
@@ -84,9 +82,34 @@ $(document).ready ->
       if calEvent?.category? and parseInt(calEvent.category) > 0
         $event.addClass('wc-cal-event-color' + calEvent.category)
     eventNew : (calEvent, $event) ->
-      editEvent(calEvent, $event)
+      updateEvent(calEvent, $event)
     eventClick: (calEvent, $event) ->
-      editEvent(calEvent, $event)
+      updateEvent(calEvent, $event)
+    eventResize : (calEvent, $event) ->
+      post_data = {
+        event_id: calEvent.id
+        start : calEvent.start.toString().replace(/GMT.*$/, '').replace(/(^\s+|\s+$)/g, '')
+        end : calEvent.end.toString().replace(/GMT.*$/, '').replace(/(^\s+|\s+$)/g, '')
+        title : calEvent.title
+        body : calEvent.body
+        category : calEvent.category
+      }
+      
+      $.ajax({
+        data: post_data
+        type: 'post'
+        url: '/calendar/event/update.json'
+        success: (data) ->
+          if data?.success? && data.success is false
+            $('<p>時間の変更の保存に失敗しました<br>リロードしてやり直してください</p>').dialog({
+              title: '保存に失敗しました',
+              height: 150,
+              buttons: {
+                'リロードする': ->
+                  location.href = location.href
+              }
+            });
+      })
     data: (start, end, callback) ->
       post_data = 
       

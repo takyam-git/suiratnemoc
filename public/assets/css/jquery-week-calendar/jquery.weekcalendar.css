@@ -276,11 +276,3 @@ table.wc-time-slots {
 *:first-child+html .wc-grid-row-oddeven{top:2px;}
 *:first-child+html .wc-grid-row-freebusy{top:1px;}
 *:first-child+html .wc-time-slots .wc-today{/* due to rendering issues, no background */background:none;}
-
-.wc-cal-event-color1 {
-	background-color: #eecc99;
-}
-
-.wc-cal-event-color1 .wc-time {
-	background-color: #fa7;
-}

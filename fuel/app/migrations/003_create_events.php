@@ -11,7 +11,7 @@ class Create_events
 			'userid' => array('constraint' => 11, 'type' => 'int'),
 			'title' => array('constraint' => 255, 'type' => 'varchar'),
 			'body' => array('type' => 'text'),
-			'start' => array('type' => 'time'),
+			'start' => array('type' => 'datetime'),
 			'end' => array('type' => 'datetime'),
 			'category' => array('constraint' => 11, 'type' => 'int'),
 			'created_at' => array('constraint' => 11, 'type' => 'int'),

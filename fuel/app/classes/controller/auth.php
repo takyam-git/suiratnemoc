@@ -34,7 +34,7 @@ class Controller_Auth extends Controller_Base
 				
 				// check the credentials. This assumes that you have the previous table created
 				if (Auth::check() or $auth->login(Input::post('username'), Input::post('password'))){
-					Response::redirect('auth');
+					Response::redirect('calendar');
 				}else{
 					$error_msg .= 'ログインに失敗しました<br>';
 				}
@@ -85,7 +85,7 @@ class Controller_Auth extends Controller_Base
 					$auth = Auth::instance();
 					$auth->create_user(Input::post('username'), Input::post('password'), Input::post('mail'), 1);
 					if($auth->login(Input::post('username'), Input::post('password'))){
-						Response::redirect('auth/logged');
+						Response::redirect('calendar');
 					}
 				}catch(SimpleUserUpdateException $e){
 					$error_msg .= $e->getMessage() . '<br>';

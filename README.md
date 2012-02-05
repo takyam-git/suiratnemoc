@@ -1,49 +1,36 @@
-#FuelPHP
+#Suiratnemoc
+* FuelPHPで作ってる日報用ツール
 
-* [Website](http://fuelphp.com/)
-* [Documentation](http://docs.fuelphp.com) and in its own [git repo](https://github.com/fuel/docs)
-* [Forums](http://fuelphp.com/forums) for comments, discussion and community support
-* Version: 1.1
-
-## Description
-
-Fuel is a fast, lightweight PHP 5.3 framework. In an age where frameworks are a dime a dozen, We believe that Fuel will stand out in the crowd.  It will do this by combining all the things you love about the great frameworks out there, while getting rid of the bad.
-
-##Development Team
-
-* Dan Horrigan - Lead Developer ([http://dhorrigan.com](http://dhorrigan.com))
-* Jelmer Schreuder - Senior Developer ([http://jelmerschreuder.nl/](http://jelmerschreuder.nl/))
-* Phil Sturgeon - Developer ([http://philsturgeon.co.uk](http://philsturgeon.co.uk))
-* Harro Verton - Developer ([http://wanwizard.eu/](http://wanwizard.eu/))
-* Frank de Jonge - Developer ([http://frenky.net/](http://frenky.net/))
-
-##Downloading FuelPHP
-
-Since Fuel uses Submodules and since GitHub Downloads don't support submodules, do not download Fuel using the Downloads link here.
-
-We will be putting a "Download" section on <http://fuelphp.com> soon.
-
-##Cloning Fuel
-
-FuelPHP uses submodules for things like the **core** folder.  After you clone the repository you will need to init and update the submodules.
-
-Here is the basic usage:
-
-    git clone --recursive git://github.com/fuel/fuel.git
-
-The above command is the same as running:
-
-    git clone git://github.com/fuel/fuel.git
-    cd fuel/
-    git submodule init
-    git submodule update
-
-You can also shorten the last two commands to one:
-
-    git submodule update --init
-
-##Donate
-
-[Donate Here](http://www.pledgie.com/campaigns/14124)
-
-Any donations would help support the framework and pay for software, development and hosting costs. We understand if you cannot, but greatly appreciate anything you can give.
+##TODO
+* カテゴリの作成
+ * ユーザーカテゴリとグローバルカテゴリを持つ
+  * ユーザーカテゴリはそのユーザーだけのカテゴリ
+  * グローバルカテゴリは全体に対して持たせるカテゴリ
+  * 管理者が必要最低限のカテゴリを設定し、各ユーザーはそれで足りない分を自分専用のカテゴリとして作るイメージ
+ * カテゴリと色とのヒモ付
+  * カレンダーに表示する色を作成し、各カテゴリに対してひもづけられるようにする
+  * 色はどのユーザーも好きに追加する事ができ、「ヘッダー」「ヘッダーカラー」「ベース」「テキストカラー」の4色の組み合わせとする
+  * 一部カスタマイズ好きなユーザーが色を追加し、一般のユーザーはそれら追加されたカラーセットから選ぶようなイメージ
+* サマリーの作成
+ * イベントのテーブルビュー
+ * CSVによる一定期間のイベント一覧の出力
+ * カテゴリ毎の時間合計の出力
+ * CSVによる一定期間のカテゴリ別の時間合計の出力
+* 日報メール機能の作成
+ * 選んだ日付のイベントを元にメールを作成・送信する
+ * テンプレート（件名・本文・To,cc,bcc）設定が可能
+* 他のユーザーのスケジュールを見れる権限
+ * Readonly権限で見れるようにする
+ * 各ユーザーの設定で、どの範囲で公開するか決定する
+ * とはいえ管理者ユーザーグループは見れるようにする
+* プロフィール変更機能
+ * パスワードの変更が出来るように
+ * メールアドレスの変更出来るように
+* 新規登録時メールで通知する
+ * メール中のリンククリック→認証　つける？
+* CSRF対策
+ * Token埋め込んでないから諸々埋め込む
+* トップページの作成
+ * 別にいらない気はする
+* ウェブサイトの作成
+ * マニュアルとか

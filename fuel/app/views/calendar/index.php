@@ -21,13 +21,13 @@
 					<option value="">終了時間を選んでください</option>
 				</select>
 			</li>
-			<!-- <li>
+			<li>
 				<label for="category">カテゴリ: </label>
 				<select name="category" id="category">
 					<option value="">デフォルト</option>
 					<option value="1">赤</option>
 				</select>
-			</li> -->
+			</li>
 			<li>
 				<label for="title">件名: </label>
 				<input id="title" type="text" name="title" />

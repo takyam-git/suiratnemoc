@@ -53,8 +53,11 @@
 					<a class="brand" href="/">Suiratnemoc</a>
 					<div class="nav-collapse">
 						<ul class="nav">
-							<li class="<?php echo Uri::segment(2) == '' ? 'active' : '' ?>">
-								<?php echo Html::anchor('calendar', 'カレンダー') ?>
+							<li class="<?php echo strpos(Uri::string(), 'calendar') === 0 ? 'active' : '' ?>">
+								<?php echo Html::anchor('calendar', 'カレンダー');  ?>
+							</li>
+							<li class="<?php echo strpos(Uri::string(), 'category') === 0 ? 'active' : '' ?>">
+								<?php echo Html::anchor('category', 'カテゴリー');  ?>
 							</li>
 						</ul>
 					</div><!--/.nav-collapse -->
