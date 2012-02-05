@@ -1,0 +1,17 @@
+<?php
+/**
+ * The development database settings.
+ */
+
+return array(
+	'default' => array(
+		'type'           => 'mysqli',
+		'connection'  => array(
+			'hostname'       => 'localhost',
+			'port'           => '3306',
+			'database'       => 'mydatabase',
+			'username'       => 'mydatabaseuser',
+			'password'       => 'mydatabasepassword',
+		),
+	),
+);
