@@ -1,0 +1,13 @@
+.inner{margin:20px;color:#fff;}.inner h2{color:#fff;}
+.inner .keyvisual{text-align:center;}
+#categoryTitle{background-color:#062C3D;color:#fff;}#categoryTitle h1{color:#fff;}
+#favoriteCategory{background-color:#E00538;}
+#globalCategory{background-color:#5D9E9B;}
+#myCategory{background-color:#6B7566;}
+#categoryColors{background-color:#272B28;}
+.categoryList{list-style:none;margin:0;padding:0;text-indent:0;margin-top:20px;}.categoryList li{border:1px dashed #fff;padding:5px 10px;margin-bottom:10px;cursor:pointer;overflow:auto;}.categoryList li i.category-config-icon{display:none;}
+.categoryList li:hover{border:1px solid #fff;background-color:rgba(255, 255, 255, 0.3);}.categoryList li:hover i.category-config-icon{display:inline-block;}
+.categoryList li.addedToFavorite{border:1px solid transparent;background-color:rgba(255, 255, 255, 0.3);}
+.categoryList li.addedToFavorite:hover{background-color:rgba(255, 255, 255, 0.5);}
+#colorSetList,#modifyCategoryDialog{display:none;}
+ul.colorSetListUl li a i{color:#fff;padding:5px 10px 5px 0px;}ul.colorSetListUl li a i i{padding:5px 10px;margin-right:10px;}
