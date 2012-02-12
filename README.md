@@ -1,6 +1,59 @@
 #Suiratnemoc
 * FuelPHPで作ってる日報用ツール
 
+##インストール
+* まだ出来上がってないけどな！
+* cloneのオプションいつも忘れるのでメモメモ
+* $ git clone --recursive git://github.com/takyam-git/suiratnemoc.git
+* $ php oil refine install
+* $ cd fuel/app/config/development
+* $ mysql -u **** -p
+ * CREATE DATABASE `mydbname`;
+ * USE suiratnemoc;
+ * GRANT ALL ON `mydbname`.* TO 'mydbuser'@'localhost' IDENTIFIED BY '**********';
+* $ cp db.php.sample db.php
+ * vi db.php
+* $ php oil refine migrate
+
+###nginx conf sample
+      1 server {
+      2     listen 80;
+      3     server_name  local.suiratnemoc;
+      4
+      5     server_tokens off;
+      6     gzip on;
+      7     autoindex on;
+      8
+      9     access_log /path/to/suiratnemoc/logs/access.log;
+     10     error_log /path/to/suiratnemoc/logs/error.log notice;
+     11
+     12     rewrite_log on;
+     13
+     14     charset utf-8;
+     15
+     16     root /path/to/suiratnemoc/public;
+     17     index index.php;
+     18
+     19     location / {
+     20         try_files $uri /index.php?$uri$args;
+     21     }
+     22
+     23     location ~ .*\.php$ {
+     24         fastcgi_pass  127.0.0.1:9000;
+     25         fastcgi_param SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+     26         #fastcgi_param FUEL_ENV production;
+     27         include fastcgi_params;
+     28     }
+     29
+     30     location ~ /\. {
+     31         access_log off;
+     32         log_not_found off;
+     33         deny all;
+     34     }
+     35 }
+     36
+
+
 ##TODO
 * カテゴリの作成
  * ユーザーカテゴリとグローバルカテゴリを持つ
@@ -14,7 +67,7 @@
    * これは10秒に１回程度の間隔でsetIntervalして、変更が発生していたら保存する感じ
     * autosave.coffeeで実装
 * カレンダーページ
- * カテゴリ情報を連携させる
+ * カテゴリ情報を連携
 * サマリーの作成
  * イベントのテーブルビュー
  * CSVによる一定期間のイベント一覧の出力
