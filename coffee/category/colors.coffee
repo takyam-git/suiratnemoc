@@ -1,9 +1,10 @@
-$ ->
+$ =>
   $triggerButton = $('#selectColorSet')
   defaultButtonText = $triggerButton.text()
   $valueField = $('#selectedColorID')
+  $colorsContainer = $('#colorSetList')
   $triggerButton.menu({
-    content: $('#colorSetList').clone().html()
+    content: $colorsContainer.clone().html()
     backLinkText: '戻る'
     crumbDefaultText: ''
     flyOut: true
@@ -19,8 +20,3 @@ $ ->
           $valueField.val(colorSetID)
       true
   });
-  
-  $(document).on('click', 'a.colorSetCategoryLink', ->
-    console.log 'hoge'
-    false
-  )

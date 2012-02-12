@@ -11,3 +11,4 @@
 .categoryList li.addedToFavorite:hover{background-color:rgba(255, 255, 255, 0.5);}
 #colorSetList,#modifyCategoryDialog{display:none;}
 ul.colorSetListUl li a i{color:#fff;padding:5px 10px 5px 0px;}ul.colorSetListUl li a i i{padding:5px 10px;margin-right:10px;}
+.searchbox{margin:10px 0;text-align:center;}

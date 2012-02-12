@@ -1,3 +1,4 @@
+<div id="is_admin_flag" data-isadmin="<?php echo intval($is_admin_user); ?>"></div>
 <div class="row">
 	<div class="span12" id="categoryTitle">
 		<div class="row">
@@ -9,6 +10,9 @@
 			<div class="span9">
 				<div class="inner">
 					<a href="#" class="btn btn-large pull-right" id="add-my-category-btn"><i class="icon-plus "></i>マイカテゴリを追加</a>
+					<?php if($is_admin_user){ ?>
+						<a href="#" class="btn btn-large pull-right" id="add-global-category-btn" style="margin-right:20px;"><i class="icon-plus "></i>グローバルカテゴリを追加</a>
+					<?php } ?>
 				</div>
 			</div>
 		</div>
@@ -17,54 +21,68 @@
 <div class="row show-grid">
 	<div class="span4" id="favoriteCategory">
 		<div class="inner">
-			<p class="keyvisual"><img src="/assets/img/category/favorite.png"></p>
-			<h2>お気に入り</h2>
-			<p>よく利用するカテゴリをお気に入りとして登録しておくと、イベントの登録が楽になります。</p>
-			<p>お気に入りに追加するには、ドラッグ＆ドロップしてください。削除するにはクリックします。</p>
+			<div class="categoryHeader">
+				<p class="keyvisual"><img src="/assets/img/category/favorite.png"></p>
+				<h2>お気に入り</h2>
+				<p>よく利用するカテゴリをお気に入りとして登録しておくと、イベントの登録が楽になります。</p>
+				<p>お気に入りに追加するには、ドラッグ＆ドロップしてください。削除するにはクリックします。</p>
+			</div>
+			<div class="form-search searchbox">
+				<input type="text" class="input-xlarge search-query" placeholder="絞り込み検索">
+			</div>
 			<div class="categories">
 				<ul class="categoryList" id="favoriteCategoryList">
-					<li><i class="icon-cog icon-white pull-right category-config-icon"></i>fav1</li>
-					<li><i class="icon-cog icon-white pull-right category-config-icon"></i>fav2</li>
-					<li><i class="icon-cog icon-white pull-right category-config-icon"></i>fav3</li>
-					<li><i class="icon-cog icon-white pull-right category-config-icon"></i>fav4</li>
-					<li><i class="icon-cog icon-white pull-right category-config-icon"></i>fav5</li>
+					<li data-type="global" data-id="1" data-color="1"><i class="icon-remove icon-white pull-right category-config-icon"></i>global1</li>
+					<li data-type="global" data-id="2" data-color="2"><i class="icon-remove icon-white pull-right category-config-icon"></i>global2</li>
+					<li data-type="local" data-id="4" data-color="10"><i class="icon-remove icon-white pull-right category-config-icon"></i>local4</li>
+					<li data-type="local" data-id="5" data-color="11"><i class="icon-remove icon-white pull-right category-config-icon"></i>local5</li>
 				</ul>
 			</div>
 		</div>
 	</div>
 	<div class="span4" id="globalCategory">
 		<div class="inner">
-			<p class="keyvisual"><img src="/assets/img/category/shared_category.png"></p>
-			<h2>グローバルカテゴリ</h2>
-			<p>全ユーザで共有しているカテゴリで、管理者以外編集できません。</p>
+			<div class="categoryHeader">
+				<p class="keyvisual"><img src="/assets/img/category/shared_category.png"></p>
+				<h2>グローバルカテゴリ</h2>
+				<p>全ユーザで共有しているカテゴリで、管理者以外編集できません。</p>
+			</div>
+			<div class="form-search searchbox">
+				<input type="text" class="input-xlarge search-query" placeholder="絞り込み検索">
+			</div>
 			<div class="categories">
 				<ul class="categoryList baseCategoryList">
-					<li id="globalCategory-1" data-type="global" data-id="1"><i class="icon-cog icon-white pull-right category-config-icon"></i>global1</a></li>
-					<li id="globalCategory-2" data-type="global" data-id="2"><i class="icon-cog icon-white pull-right category-config-icon"></i>global2</li>
-					<li id="globalCategory-3" data-type="global" data-id="3"><i class="icon-cog icon-white pull-right category-config-icon"></i>global3</li>
-					<li id="globalCategory-4" data-type="global" data-id="4"><i class="icon-cog icon-white pull-right category-config-icon"></i>global4</li>
-					<li id="globalCategory-5" data-type="global" data-id="5"><i class="icon-cog icon-white pull-right category-config-icon"></i>global5</li>
-					<li id="globalCategory-6" data-type="global" data-id="6"><i class="icon-cog icon-white pull-right category-config-icon"></i>global6</li>
+					<li id="globalCategory-1" data-type="global" data-id="1" data-color="1"><i class="icon-cog icon-white pull-right category-config-icon"></i>global1</li>
+					<li id="globalCategory-2" data-type="global" data-id="2" data-color="2"><i class="icon-cog icon-white pull-right category-config-icon"></i>global2</li>
+					<li id="globalCategory-3" data-type="global" data-id="3" data-color="3"><i class="icon-cog icon-white pull-right category-config-icon"></i>global3</li>
+					<li id="globalCategory-4" data-type="global" data-id="4" data-color="4"><i class="icon-cog icon-white pull-right category-config-icon"></i>global4</li>
+					<li id="globalCategory-5" data-type="global" data-id="5" data-color="5"><i class="icon-cog icon-white pull-right category-config-icon"></i>global5</li>
+					<li id="globalCategory-6" data-type="global" data-id="6" data-color="6"><i class="icon-cog icon-white pull-right category-config-icon"></i>global6</li>
 				</ul>
 			</div>
 		</div>
 	</div>
 	<div class="span4" id="myCategory">
 		<div class="inner">
-			<p class="keyvisual"><img src="/assets/img/category/personal_category.png"></p>
-			<h2>マイカテゴリ</h2>
-			<p>あなただけのカテゴリで、他の人が編集したり利用することはできません。</p>
+			<div class="categoryHeader">
+				<p class="keyvisual"><img src="/assets/img/category/personal_category.png"></p>
+				<h2>マイカテゴリ</h2>
+				<p>あなただけのカテゴリで、他の人が編集したり利用することはできません。</p>
+			</div>
+			<div class="form-search searchbox">
+				<input type="text" class="input-xlarge search-query" placeholder="絞り込み検索">
+			</div>
 			<div class="categories">
 				<ul class="categoryList baseCategoryList">
-					<li id="localCategory-1" data-type="local" data-id="1"><i class="icon-cog icon-white pull-right category-config-icon"></i>local1</li>
-					<li id="localCategory-2" data-type="local" data-id="2"><i class="icon-cog icon-white pull-right category-config-icon"></i>local2</li>
-					<li id="localCategory-3" data-type="local" data-id="3"><i class="icon-cog icon-white pull-right category-config-icon"></i>local3</li>
-					<li id="localCategory-4" data-type="local" data-id="4"><i class="icon-cog icon-white pull-right category-config-icon"></i>local4</li>
-					<li id="localCategory-5" data-type="local" data-id="5"><i class="icon-cog icon-white pull-right category-config-icon"></i>local5</li>
-					<li id="localCategory-6" data-type="local" data-id="6"><i class="icon-cog icon-white pull-right category-config-icon"></i>local6</li>
-					<li id="localCategory-7" data-type="local" data-id="7"><i class="icon-cog icon-white pull-right category-config-icon"></i>local7</li>
-					<li id="localCategory-8" data-type="local" data-id="8"><i class="icon-cog icon-white pull-right category-config-icon"></i>local8</li>
-					<li id="localCategory-9" data-type="local" data-id="9"><i class="icon-cog icon-white pull-right category-config-icon"></i>local9</li>
+					<li id="localCategory-1" data-type="local" data-id="1" data-color="7"><i class="icon-cog icon-white pull-right category-config-icon"></i>local1</li>
+					<li id="localCategory-2" data-type="local" data-id="2" data-color="8"><i class="icon-cog icon-white pull-right category-config-icon"></i>local2</li>
+					<li id="localCategory-3" data-type="local" data-id="3" data-color="9"><i class="icon-cog icon-white pull-right category-config-icon"></i>local3</li>
+					<li id="localCategory-4" data-type="local" data-id="4" data-color="10"><i class="icon-cog icon-white pull-right category-config-icon"></i>local4</li>
+					<li id="localCategory-5" data-type="local" data-id="5" data-color="11"><i class="icon-cog icon-white pull-right category-config-icon"></i>local5</li>
+					<li id="localCategory-6" data-type="local" data-id="6" data-color="12"><i class="icon-cog icon-white pull-right category-config-icon"></i>local6</li>
+					<li id="localCategory-7" data-type="local" data-id="7" data-color="13"><i class="icon-cog icon-white pull-right category-config-icon"></i>local7</li>
+					<li id="localCategory-8" data-type="local" data-id="8" data-color="14"><i class="icon-cog icon-white pull-right category-config-icon"></i>local8</li>
+					<li id="localCategory-9" data-type="local" data-id="9" data-color="15"><i class="icon-cog icon-white pull-right category-config-icon"></i>local9</li>
 					
 				</ul>
 			</div>
@@ -74,29 +92,33 @@
 <div id="modifyCategoryDialog" class="modal">
 	<div class="modal-header">
 		<a class="close" data-dismiss="modal">×</a>
-		<h3>カテゴリデータ</h3>
+		<h3 id="modifyCategoryDialogTitle">カテゴリデータ</h3>
 	</div>
 	<div class="modal-body">
 		<form class="form-horizontal">
 			<fieldset>
-				<div class="control-group">
-					<label class="control-label" for="input01">カテゴリ名</label>
+				<div class="control-group" id="categoryNameGroup">
+					<label class="control-label" for="categoryName">カテゴリ名</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" id="input01">
+						<input type="text" class="input-xlarge" id="categoryName">
+						<span class="help-inline" id="categoryNameError"></span>
+						<span id="categoryNameScreen"></span>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="input01">カラーセット</label>
+				<div class="control-group" id="categoryColorGroup">
+					<label class="control-label" for="selectedColorID">カラーセット</label>
 					<div class="controls">
 						<a href="#" class="btn" id="selectColorSet">色を選択する</a>
 						<input type="hidden" id="selectedColorID" name="selectedColorID" value="" />
+						<span class="help-inline" id="categoryColorError"></span>
+						<span id="categoryColorScreen"></span>
 					</div>
 				</div>
 			</fieldset>
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a href="#" class="btn btn-primary">保存する</a>
+		<a href="#" class="btn btn-primary" id="categoryDialogSaveButton">保存する</a>
 		<a class="btn" data-dismiss="modal">キャンセル</a>
 	</div>
 </div>
