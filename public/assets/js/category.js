@@ -24,7 +24,7 @@
   });
 
   $(function() {
-    var $addGlobalCategoryBtn, $addMyCategoryBtn, $baseCategoryList, $baseCategoryListItems, $categoryColorError, $categoryColorField, $categoryColorGroup, $categoryColorScreen, $categoryDialog, $categoryDialogError, $categoryDialogRemoveButton, $categoryDialogSaveButton, $categoryDialogTitle, $categoryNameError, $categoryNameField, $categoryNameGroup, $categoryNameScreen, $colorsContainer, $favoriteList, $favoriteListItems, $globalList, $myList, $newItemBase, $newItemBaseIcon, $removeCategoryDialog, $removeCategoryDoButton, $removeCategoryError, $removeIcon, $triggerButton, changeCategoryItem, defaultButtonText, draggingFlag, favoriteItemClickFunc, glob, isAdmin, itemClickFunc, listDraggableOption, listFavoriteClassName, openCategoryDialog;
+    var $addGlobalCategoryBtn, $addMyCategoryBtn, $baseCategoryList, $baseCategoryListItems, $categoryColorError, $categoryColorField, $categoryColorGroup, $categoryColorScreen, $categoryDialog, $categoryDialogError, $categoryDialogRemoveButton, $categoryDialogSaveButton, $categoryDialogTitle, $categoryNameError, $categoryNameField, $categoryNameGroup, $categoryNameScreen, $colorsContainer, $favoriteList, $favoriteListItems, $globalList, $myList, $newItemBase, $newItemBaseIcon, $removeCategoryDialog, $removeCategoryDoButton, $removeCategoryError, $removeIcon, $triggerButton, changeCategoryItem, defaultButtonText, draggingFlag, favoriteItemClickFunc, glob, isAdmin, itemClickFunc, listDraggableOption, listFavoriteClassName, openCategoryDialog, saveMyFavorites;
     glob = _this;
     isAdmin = $('#is_admin_flag').data('isadmin') === 1;
     $baseCategoryList = $('.baseCategoryList');
@@ -36,6 +36,24 @@
     $addMyCategoryBtn = $('a#add-my-category-btn');
     $addGlobalCategoryBtn = $('a#add-global-category-btn');
     _this.favoriteList = $favoriteList;
+    saveMyFavorites = function() {
+      var $items, ids,
+        _this = this;
+      $items = $('li', glob.favoriteList);
+      ids = [];
+      $items.each(function() {
+        return ids.push($(this).attr('data-id'));
+      });
+      return $.ajax({
+        url: '/category/action/favorite.json',
+        type: 'post',
+        data: {
+          categories: ids
+        },
+        dataType: 'json',
+        success: function(data) {}
+      });
+    };
     $removeIcon = $('<i class="icon-remove icon-white pull-right category-config-icon"></i>');
     favoriteItemClickFunc = function() {
       var $this;
@@ -43,6 +61,7 @@
         $this = $(this);
         $('li[data-type="' + $this.data('type') + '"][data-id="' + $this.data('id') + '"]', $baseCategoryList).removeClass(listFavoriteClassName).draggable(listDraggableOption);
         $this.remove();
+        saveMyFavorites();
         glob.modified = true;
       }
       return false;
@@ -59,6 +78,7 @@
         return $helper;
       },
       revert: "invalid",
+      scroll: true,
       start: function() {
         return draggingFlag = true;
       },
@@ -89,6 +109,7 @@
       stop: function() {
         draggingFlag = false;
         glob.modified = true;
+        saveMyFavorites();
         return null;
       }
     });
@@ -344,7 +365,7 @@
   this.modified = false;
 
   $(function() {
-    var $dialog, $message, saveFunc, saveInterval, timer;
+    var $dialog, $message, saveFunc, saveInterval;
     $dialog = $('<div></div>');
     $message = $('<p>test</p>');
     $dialog.append($message);
@@ -364,7 +385,7 @@
     });
     $('body').append($dialog);
     saveInterval = 1000 * 2;
-    saveFunc = function() {
+    return saveFunc = function() {
       var $items, ids;
       clearTimeout(timer);
       if (_this.modified === true) {
@@ -397,10 +418,9 @@
           }
         });
       } else {
-        return setTimeout(saveFunc, saveInterval);
+
       }
     };
-    return timer = setTimeout(saveFunc, saveInterval);
   });
 
   /*

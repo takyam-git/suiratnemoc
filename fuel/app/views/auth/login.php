@@ -1,4 +1,7 @@
 <div class="row">
+	<div class="span12" style="text-align: center;margin: 20px 0;">
+		<img src="/assets/img/logo.png" />
+	</div>
 	<div class="span12">
 		<ul>
 		<?php

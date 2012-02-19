@@ -164,59 +164,59 @@
 		<li>
 			<a href="#">赤系</a>
 			<ul>
-				<li><a href="#" data-id="1" data-name="赤-A"><i class="category-color1"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="15" data-name="赤-B"><i class="category-color15"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="16" data-name="赤-C"><i class="category-color16"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="17" data-name="赤-D"><i class="category-color17"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="31" data-name="赤-E"><i class="category-color31"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="32" data-name="赤-F"><i class="category-color32"><i class="sub-color">00:00</i>イベント名</i></a></li>
+				<li><a href="#" data-id="1" data-name="赤-A"><i class="category-color1"><i class="sub-color">00:00</i>赤-A</i></a></li>
+				<li><a href="#" data-id="15" data-name="赤-B"><i class="category-color15"><i class="sub-color">00:00</i>赤-B</i></a></li>
+				<li><a href="#" data-id="16" data-name="赤-C"><i class="category-color16"><i class="sub-color">00:00</i>赤-C</i></a></li>
+				<li><a href="#" data-id="17" data-name="赤-D"><i class="category-color17"><i class="sub-color">00:00</i>赤-D</i></a></li>
+				<li><a href="#" data-id="31" data-name="赤-E"><i class="category-color31"><i class="sub-color">00:00</i>赤-E</i></a></li>
+				<li><a href="#" data-id="32" data-name="赤-F"><i class="category-color32"><i class="sub-color">00:00</i>赤-F</i></a></li>
 			</ul>
 		</li>
 		<li>
 			<a href="#">黄系</a>
 			<ul>
-				<li><a href="#" data-id="2" data-name="黄-A"><i class="category-color2"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="3" data-name="黄-B"><i class="category-color3"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="4" data-name="黄-C"><i class="category-color4"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="18" data-name="黄-D"><i class="category-color18"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="19" data-name="黄-E"><i class="category-color19"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="20" data-name="黄-F"><i class="category-color20"><i class="sub-color">00:00</i>イベント名</i></a></li>
+				<li><a href="#" data-id="2" data-name="黄-A"><i class="category-color2"><i class="sub-color">00:00</i>黄-A</i></a></li>
+				<li><a href="#" data-id="3" data-name="黄-B"><i class="category-color3"><i class="sub-color">00:00</i>黄-B</i></a></li>
+				<li><a href="#" data-id="4" data-name="黄-C"><i class="category-color4"><i class="sub-color">00:00</i>黄-C</i></a></li>
+				<li><a href="#" data-id="18" data-name="黄-D"><i class="category-color18"><i class="sub-color">00:00</i>黄-D</i></a></li>
+				<li><a href="#" data-id="19" data-name="黄-E"><i class="category-color19"><i class="sub-color">00:00</i>黄-E</i></a></li>
+				<li><a href="#" data-id="20" data-name="黄-F"><i class="category-color20"><i class="sub-color">00:00</i>黄-F</i></a></li>
 			</ul>
 		</li>
 		<li>
 			<a href="#">紫系</a>
 			<ul>
-				<li><a href="#" data-id="12" data-name="紫-A"><i class="category-color12"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="13" data-name="紫-B"><i class="category-color13"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="14" data-name="紫-C"><i class="category-color14"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="28" data-name="紫-D"><i class="category-color28"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="29" data-name="紫-E"><i class="category-color29"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="30" data-name="紫-F"><i class="category-color30"><i class="sub-color">00:00</i>イベント名</i></a></li>
+				<li><a href="#" data-id="12" data-name="紫-A"><i class="category-color12"><i class="sub-color">00:00</i>紫-A</i></a></li>
+				<li><a href="#" data-id="13" data-name="紫-B"><i class="category-color13"><i class="sub-color">00:00</i>紫-B</i></a></li>
+				<li><a href="#" data-id="14" data-name="紫-C"><i class="category-color14"><i class="sub-color">00:00</i>紫-C</i></a></li>
+				<li><a href="#" data-id="28" data-name="紫-D"><i class="category-color28"><i class="sub-color">00:00</i>紫-D</i></a></li>
+				<li><a href="#" data-id="29" data-name="紫-E"><i class="category-color29"><i class="sub-color">00:00</i>紫-E</i></a></li>
+				<li><a href="#" data-id="30" data-name="紫-F"><i class="category-color30"><i class="sub-color">00:00</i>紫-F</i></a></li>
 				
 			</ul>
 		</li>
 		<li>
 			<a href="#">青系</a>
 			<ul>
-				<li><a href="#" data-id="9" data-name="青-A"><i class="category-color9"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="10" data-name="青-B"><i class="category-color10"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="11" data-name="青-C"><i class="category-color11"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="25" data-name="青-D"><i class="category-color25"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="26" data-name="青-E"><i class="category-color26"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="27" data-name="青-F"><i class="category-color27"><i class="sub-color">00:00</i>イベント名</i></a></li>
+				<li><a href="#" data-id="9" data-name="青-A"><i class="category-color9"><i class="sub-color">00:00</i>青-A</i></a></li>
+				<li><a href="#" data-id="10" data-name="青-B"><i class="category-color10"><i class="sub-color">00:00</i>青-B</i></a></li>
+				<li><a href="#" data-id="11" data-name="青-C"><i class="category-color11"><i class="sub-color">00:00</i>青-C</i></a></li>
+				<li><a href="#" data-id="25" data-name="青-D"><i class="category-color25"><i class="sub-color">00:00</i>青-D</i></a></li>
+				<li><a href="#" data-id="26" data-name="青-E"><i class="category-color26"><i class="sub-color">00:00</i>青-E</i></a></li>
+				<li><a href="#" data-id="27" data-name="青-F"><i class="category-color27"><i class="sub-color">00:00</i>青-F</i></a></li>
 			</ul>
 		</li>
 		<li>
 			<a href="#">緑系</a>
 			<ul>
-				<li><a href="#" data-id="5" data-name="緑-A"><i class="category-color5"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="6" data-name="緑-B"><i class="category-color6"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="7" data-name="緑-C"><i class="category-color7"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="8" data-name="緑-D"><i class="category-color8"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="21" data-name="緑-E"><i class="category-color21"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="22" data-name="緑-F"><i class="category-color22"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="23" data-name="緑-G"><i class="category-color23"><i class="sub-color">00:00</i>イベント名</i></a></li>
-				<li><a href="#" data-id="24" data-name="緑-H"><i class="category-color24"><i class="sub-color">00:00</i>イベント名</i></a></li>
+				<li><a href="#" data-id="5" data-name="緑-A"><i class="category-color5"><i class="sub-color">00:00</i>緑-A</i></a></li>
+				<li><a href="#" data-id="6" data-name="緑-B"><i class="category-color6"><i class="sub-color">00:00</i>緑-B</i></a></li>
+				<li><a href="#" data-id="7" data-name="緑-C"><i class="category-color7"><i class="sub-color">00:00</i>緑-C</i></a></li>
+				<li><a href="#" data-id="8" data-name="緑-D"><i class="category-color8"><i class="sub-color">00:00</i>緑-D</i></a></li>
+				<li><a href="#" data-id="21" data-name="緑-E"><i class="category-color21"><i class="sub-color">00:00</i>緑-E</i></a></li>
+				<li><a href="#" data-id="22" data-name="緑-F"><i class="category-color22"><i class="sub-color">00:00</i>緑-F</i></a></li>
+				<li><a href="#" data-id="23" data-name="緑-G"><i class="category-color23"><i class="sub-color">00:00</i>緑-G</i></a></li>
+				<li><a href="#" data-id="24" data-name="緑-H"><i class="category-color24"><i class="sub-color">00:00</i>緑-H</i></a></li>
 			</ul>
 		</li>
 		<li><a href="#" data-id="cancel">デフォルト</li>

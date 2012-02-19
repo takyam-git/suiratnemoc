@@ -4,10 +4,12 @@ var fs = require('fs')
 var coffee_scripts = [
 	{ from: 'coffee/calendar/*.coffee', to: 'public/assets/js/calendar.js' },
 	{ from: 'coffee/category/*.coffee', to: 'public/assets/js/category.js' },
+	{ from: 'coffee/summary/*.coffee', to: 'public/assets/js/summary.js' },
 ];
 var less_files = [
 	{ from: 'less/category.less', to: 'public/assets/css/category/category.css'},
 	{ from: 'less/calendar.less', to: 'public/assets/css/calendar/calendar.css'},
+	{ from: 'less/summary.less', to: 'public/assets/css/summary/summary.css'},
 	{ from: 'less/colors.less', to: 'public/assets/css/colors.css'},
 ];
 

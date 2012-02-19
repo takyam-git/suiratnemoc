@@ -15,14 +15,12 @@ class Controller_Category extends Controller_Base
 
 	public function action_index(){
 		$this->template->set_safe('optionStyles', Asset::css(array(
-			'smoothness/jquery-ui-1.8.17.custom.css',
 			'jquery-menu/fg.menu.css',
 			'colors.css',
 			'category/category.css',
 		)));
 		
 		$this->template->set_safe('optionScripts', Asset::js(array(
-			'jquery-ui-1.8.17.custom.min.js',
 			'jquery-menu/fg.menu.js',
 			'category.js',
 		)));

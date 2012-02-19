@@ -14,7 +14,8 @@
 		<!-- Le styles -->
 		<?php echo Asset::css(array(
 			'bootstrap.min.css',
-			'bootstrap-responsive.min.css'
+			'bootstrap-responsive.min.css',
+			'smoothness/jquery-ui-1.8.17.custom.css',
 		)); ?>
 		<style>
 			body {
@@ -30,6 +31,7 @@
 		<?php echo Asset::js(array(
 			'jquery-1.7.1.min.js',
 			'bootstrap.min.js',
+			'jquery-ui-1.8.17.custom.min.js',
 			'main.js',
 		)); ?>
 		
@@ -58,6 +60,9 @@
 							</li>
 							<li class="<?php echo strpos(Uri::string(), 'category') === 0 ? 'active' : '' ?>">
 								<?php echo Html::anchor('category', 'カテゴリー');  ?>
+							</li>
+							<li class="<?php echo strpos(Uri::string(), 'summary') === 0 ? 'active' : '' ?>">
+								<?php echo Html::anchor('summary', 'サマリー');  ?>
 							</li>
 						</ul>
 					</div><!--/.nav-collapse -->

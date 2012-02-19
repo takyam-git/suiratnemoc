@@ -50,6 +50,6 @@ $ =>
             @modified = false
       })
     else
-      setTimeout(saveFunc, saveInterval)
+      #setTimeout(saveFunc, saveInterval)
 
-  timer = setTimeout(saveFunc, saveInterval)
+  #timer = setTimeout(saveFunc, saveInterval)

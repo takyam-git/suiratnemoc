@@ -37,6 +37,22 @@ $ =>
   
   @favoriteList = $favoriteList
   
+  saveMyFavorites = ->
+    $items = $('li', glob.favoriteList)
+    ids = []
+    $items.each(->
+      ids.push($(this).attr('data-id'))
+    )
+    $.ajax({
+      url: '/category/action/favorite.json'
+      type: 'post'
+      data: {
+        categories: ids
+      }
+      dataType: 'json'
+      success: (data) =>
+    })
+  
   #DOM Objectの生成
   $removeIcon = $('<i class="icon-remove icon-white pull-right category-config-icon"></i>')
   
@@ -48,6 +64,7 @@ $ =>
       $('li[data-type="' + $this.data('type') + '"][data-id="' + $this.data('id') + '"]', $baseCategoryList)
         .removeClass(listFavoriteClassName).draggable(listDraggableOption)
       $this.remove()
+      saveMyFavorites()
       glob.modified = true
     return false;
   
@@ -66,6 +83,7 @@ $ =>
       $('a', $helper).remove()
       return $helper
     revert: "invalid"
+    scroll: true
     start: ->
       draggingFlag = true
     stop: (event, ui) ->
@@ -105,6 +123,8 @@ $ =>
     stop: ->
       draggingFlag = false
       glob.modified = true
+      saveMyFavorites()
+      
       null #null返さないとsortableがコケる
   })
   

@@ -14,7 +14,6 @@ class Controller_Calendar extends Controller_Base
 	public function action_index()
 	{
 		$this->template->set_safe('optionStyles', Asset::css(array(
-			'smoothness/jquery-ui-1.8.17.custom.css',
 			'jquery-week-calendar/jquery.weekcalendar.css',
 			'jquery-week-calendar/skins/default.css',
 			'jquery-menu/fg.menu.css',
@@ -23,7 +22,6 @@ class Controller_Calendar extends Controller_Base
 		)));
 		
 		$this->template->set_safe('optionScripts', Asset::js(array(
-			'jquery-ui-1.8.17.custom.min.js',
 			'jquery-week-calendar/date.js',
 			'jquery-week-calendar/jquery.weekcalendar.js',
 			'jquery-menu/fg.menu.js',
