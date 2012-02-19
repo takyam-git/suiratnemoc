@@ -1,38 +1,26 @@
 <?php
-class Controller_Calendar_Event extends Controller_Rest{
-	public function before(){
-		parent::before();
-		if ( ! Auth::check() ){
-			Response::redirect('auth/login');
-		}
-		
-		$this->current_user = Auth::check() ? Model_User::find_by_username(Auth::get_screen_name()) : null;
-		
-		// Set a global variable so views can use it
-		View::set_global('current_user', $this->current_user);
-		
-		$user_id = Auth::get_user_id();
-		$this->current_user_id = $user_id[1];
-		View::set_global('current_user_id', $this->current_user_id);
-	}
-	
+class Controller_Calendar_Event extends Controller_Restbase{
 	public function post_events(){
 		$data = array();
 		if(empty($this->current_user_id)){
 			$data['error'] = 'can\'t get user id';
 		}else{
-			$where = array(
-				array('userid', $this->current_user_id),
-			);
+			
+			$query = Model_Event::find()->where('userid', $this->current_user_id)->related('category')->limit(500);
+			
 			$start = strtotime(Input::post('start'));
 			$end = strtotime(Input::post('end'));
+
 			if($start){
-				$where[] = array('start', '>=', date('Y-m-d H:i:s', $start));
+				$query->where('start', '>=', date('Y-m-d H:i:s', $start));
 			}
 			if($end){
-				$where[] = array('end', '<=', date('Y-m-d H:i:s', $end));
+				$query->where('end', '<=', date('Y-m-d H:i:s', $end));
 			}
-			$data['events'] = Model_Event::find('all', array('where' => $where, 'limit' => 500));
+			$data['events'] = $query->get();
+			foreach($data['events'] as $key => $event){
+				$data['events'][$key]->title = htmlspecialchars($event->title);
+			}
 		}
 		$this->response($data);
 	}
@@ -41,6 +29,7 @@ class Controller_Calendar_Event extends Controller_Rest{
 		$data = array(
 			'post' => Input::post(),
 			'success' => false,
+			'errors' => array(),
 		);
 		if(empty($this->current_user_id)){
 			$data['error'] = 'can\'t get user id';
@@ -48,11 +37,33 @@ class Controller_Calendar_Event extends Controller_Rest{
 			$val = Validation::forge();
 			$val->add('start', '開始日時')->add_rule('required');
 			$val->add('end', '終了日時')->add_rule('required');
-			$val->add('title', '件名')->add_rule('required')->add_rule('max_length', 200);;
-			$val->add('body', '概要')->add_rule('max_length', 2000);;
-			$val->add('category', 'カテゴリー');
+			//$val->add('title', '件名')->add_rule('required')->add_rule('max_length', 200);;
+			$val->add('title', '概要')->add_rule('max_length', 2000);
+			//$val->add('body', '概要')->add_rule('max_length', 2000);;
+			$val->add('category', 'カテゴリー')->add_rule('required');
 			
-			if($val->run() && strtotime(Input::post('start')) && strtotime(Input::post('end'))){
+			$cateogry_id = Input::post('category');
+			if(is_numeric($cateogry_id)){
+				$category = Model_Category::find_by_id($cateogry_id);
+				if(!is_object($category)){
+					$data['errors'][] = '存在しないカテゴリが選択されています';
+				}
+			}
+			
+			$start = strtotime(Input::post('start'));
+			$end = strtotime(Input::post('end'));
+			if(!$start){
+				$data['errors'][] = '開始時間の書式が不正です';
+			}
+			if(!$end){
+				$data['errors'][] = '終了時間の書式が不正です';
+			}
+			
+			if($start && $end && $start > $end){
+				$data['errors'][] = '開始時間が終了時間より遅い時間に設定されています';
+			}
+			
+			if($val->run() && count($data['errors']) === 0){
 				
 				if(Input::post('event_id')){
 					$event = Model_Event::find_by_id(intval(Input::post('event_id')));
@@ -64,23 +75,32 @@ class Controller_Calendar_Event extends Controller_Rest{
 				$event->start = date('Y-m-d H:i:s', strtotime(Input::post('start')));
 				$event->end = date('Y-m-d H:i:s', strtotime(Input::post('end')));
 				$event->title = Input::post('title');
-				$event->body = Input::post('body');
+				//$event->body = Input::post('body');
 				$event->category = intval(Input::post('category'));
 				
 				if($event->save()){
+					$colorset = 0;
+					$category_name = '';
+					$category = Model_Category::find_by_id($event->category);
+					if(is_object($category)){
+						$colorset = intval($category->color_set);
+						$category_name = $category->name;
+					}
+					
 					$data['success'] = true;
 					$data['event'] = array(
 						'id' => $event->id,
 						'start' => $event->start,
 						'end' => $event->end,
-						'title' => $event->title,
-						'body' => $event->body,
+						'title' => htmlspecialchars($event->title),
+						//'body' => $event->body,
 						'category' => $event->category,
+						'category_name' => $category_name,
+						'colorset' => $colorset,
 					);
 				}
 			}else{
-				if($errors = $val->errors()){
-					$data['errors'] = array();
+				if($errors = $val->error()){
 					foreach($errors as $error){
 						$data['errors'][] = $error->get_message();
 					}

@@ -1,48 +1,12 @@
 (function() {
   var _this = this;
 
-  this.modified = false;
-
-  $(function() {
-    var $dialog, $message, saveFunc, saveInterval, timer;
-    $dialog = $('<div></div>');
-    $message = $('<p>test</p>');
-    $dialog.append($message);
-    $dialog.css({
-      color: '#fff',
-      display: 'none',
-      position: 'fixed',
-      bottom: 0,
-      right: 0,
-      padding: '5px 10px',
-      'z-index': 9999,
-      'background-color': 'rgba(0,0,0,0.8)'
-    });
-    $message.css({
-      margin: 0,
-      padding: 0
-    });
-    $('body').append($dialog);
-    saveInterval = 1000 * 10;
-    saveFunc = function() {
-      clearTimeout(timer);
-      if (_this.modified === true) {
-        $message.text('2012/02/03 15:34:30 変更を保存しました');
-        $dialog.stop().show('slow');
-        setTimeout(function() {
-          return $dialog.hide('slow');
-        }, 1000 * 5);
-        setTimeout(saveFunc, saveInterval);
-        return _this.modified = false;
-      } else {
-        return setTimeout(saveFunc, saveInterval);
-      }
-    };
-    return timer = setTimeout(saveFunc, saveInterval);
-  });
-
   String.prototype.trim = function() {
     return this.replace(/^(\s|　)+|(\s|　)+$/g, '');
+  };
+
+  String.prototype.htmldecode = function() {
+    return this.replace(/\&amp\;/g, '&').replace(/\&quot\;/g, '"').replace(/\&\#039\;/g, '\'').replace(/\&lt\;/g, '<').replace(/\&gt\;/g, '>');
   };
 
   $(window).load(function() {
@@ -60,7 +24,7 @@
   });
 
   $(function() {
-    var $addGlobalCategoryBtn, $addMyCategoryBtn, $baseCategoryList, $baseCategoryListItems, $categoryColorError, $categoryColorField, $categoryColorGroup, $categoryColorScreen, $categoryDialog, $categoryDialogSaveButton, $categoryDialogTitle, $categoryNameError, $categoryNameField, $categoryNameGroup, $categoryNameScreen, $colorsContainer, $favoriteList, $favoriteListItems, $globalList, $myList, $newItemBase, $newItemBaseIcon, $removeIcon, $triggerButton, changeCategoryItem, defaultButtonText, draggingFlag, favoriteItemClickFunc, glob, isAdmin, itemClickFunc, listDraggableOption, listFavoriteClassName, openCategoryDialog;
+    var $addGlobalCategoryBtn, $addMyCategoryBtn, $baseCategoryList, $baseCategoryListItems, $categoryColorError, $categoryColorField, $categoryColorGroup, $categoryColorScreen, $categoryDialog, $categoryDialogError, $categoryDialogRemoveButton, $categoryDialogSaveButton, $categoryDialogTitle, $categoryNameError, $categoryNameField, $categoryNameGroup, $categoryNameScreen, $colorsContainer, $favoriteList, $favoriteListItems, $globalList, $myList, $newItemBase, $newItemBaseIcon, $removeCategoryDialog, $removeCategoryDoButton, $removeCategoryError, $removeIcon, $triggerButton, changeCategoryItem, defaultButtonText, draggingFlag, favoriteItemClickFunc, glob, isAdmin, itemClickFunc, listDraggableOption, listFavoriteClassName, openCategoryDialog;
     glob = _this;
     isAdmin = $('#is_admin_flag').data('isadmin') === 1;
     $baseCategoryList = $('.baseCategoryList');
@@ -71,6 +35,7 @@
     $myList = $('#myCategory .categoryList');
     $addMyCategoryBtn = $('a#add-my-category-btn');
     $addGlobalCategoryBtn = $('a#add-global-category-btn');
+    _this.favoriteList = $favoriteList;
     $removeIcon = $('<i class="icon-remove icon-white pull-right category-config-icon"></i>');
     favoriteItemClickFunc = function() {
       var $this;
@@ -78,6 +43,7 @@
         $this = $(this);
         $('li[data-type="' + $this.data('type') + '"][data-id="' + $this.data('id') + '"]', $baseCategoryList).removeClass(listFavoriteClassName).draggable(listDraggableOption);
         $this.remove();
+        glob.modified = true;
       }
       return false;
     };
@@ -106,7 +72,6 @@
           $('i', $newFavorite).remove();
           $newFavorite.append($removeIcon.clone());
           $newFavorite.on('click', favoriteItemClickFunc);
-          glob.modified = true;
         } else {
           ui.helper.remove();
         }
@@ -116,6 +81,7 @@
     };
     $favoriteList.sortable({
       revert: true,
+      placeholder: 'sortable-placeholder',
       start: function() {
         draggingFlag = true;
         return null;
@@ -128,8 +94,10 @@
     });
     $baseCategoryListItems.draggable(listDraggableOption).disableSelection();
     $categoryDialog = $('#modifyCategoryDialog');
+    $categoryDialogError = $('#categoryDialogError', $categoryDialog);
     $categoryDialogTitle = $('#modifyCategoryDialogTitle', $categoryDialog);
     $categoryDialogSaveButton = $('#categoryDialogSaveButton', $categoryDialog);
+    $categoryDialogRemoveButton = $('#categoryDialogRemoveButton', $categoryDialog);
     $categoryNameGroup = $('#categoryNameGroup', $categoryDialog);
     $categoryNameField = $('#categoryName', $categoryNameGroup);
     $categoryNameError = $('#categoryNameError', $categoryNameGroup);
@@ -141,6 +109,9 @@
     $colorsContainer = $('#colorSetList');
     $triggerButton = $('#selectColorSet');
     defaultButtonText = $triggerButton.text();
+    $removeCategoryDialog = $('#removeCategoryDialog');
+    $removeCategoryDoButton = $('#categoryDialogRemoveDoButton', $removeCategoryDialog);
+    $removeCategoryError = $('#removeCategoryDialogError', $removeCategoryDialog);
     openCategoryDialog = function(type, id) {
       var $item, $list, $selectedColor, colorSetID, mode, name, titlePrefix, titleSuffix;
       if (type === 'global') {
@@ -157,7 +128,7 @@
         titleSuffix = '編集';
         $item = $('li[data-type="' + type + '"][data-id="' + id + '"]', $list);
         if (!($item.length > 0)) return false;
-        name = $item.text();
+        name = $item.text().trim().htmldecode();
         colorSetID = parseInt($item.data('color'));
       } else {
         mode = 'add';
@@ -176,6 +147,7 @@
       }
       $categoryDialogTitle.text(titlePrefix + 'カテゴリの' + titleSuffix);
       return $categoryDialog.off('shown').on('shown', function() {
+        $categoryDialogError.hide();
         $categoryNameGroup.removeClass('error');
         $categoryColorGroup.removeClass('error');
         $categoryNameError.text('');
@@ -195,10 +167,54 @@
           $triggerButton.show();
           $categoryDialogSaveButton.show();
         }
-        return $categoryDialogSaveButton.click(function() {
+        $categoryDialogRemoveButton.off('click').on('click', function() {
+          $removeCategoryError.html('').hide();
+          $categoryDialog.modal('hide');
+          $removeCategoryDialog.off('shown').on('shown', function() {
+            return $removeCategoryDoButton.on('click', function() {
+              $.ajax({
+                url: '/category/action/remove.json',
+                type: 'post',
+                data: {
+                  id: id
+                },
+                dataType: 'json',
+                success: function(data) {
+                  var ary, err, errors, key, _i, _len, _ref;
+                  if (!data.success) {
+                    errors = [];
+                    _ref = data.errors;
+                    for (key in _ref) {
+                      ary = _ref[key];
+                      for (_i = 0, _len = ary.length; _i < _len; _i++) {
+                        err = ary[_i];
+                        errors.push(err);
+                      }
+                    }
+                    return $removeCategoryError.append($('<p>' + errors.join('<br>') + '</p>')).show();
+                  } else {
+                    $('li[data-type="' + type + '"][data-id="' + id + '"]').slideUp('fast', function() {
+                      return $(this).remove();
+                    });
+                    return $removeCategoryDialog.modal('hide');
+                  }
+                },
+                complete: function(data) {}
+              });
+              return false;
+            });
+          }).on('hidden', function() {}).modal();
+          return false;
+        });
+        return $categoryDialogSaveButton.on('click', function() {
           var hasError, newCategoryColorSetID, newCategoryName;
           newCategoryName = $categoryNameField.val().trim();
           newCategoryColorSetID = $categoryColorField.val();
+          $categoryDialogError.html('').hide();
+          $categoryNameGroup.removeClass('error');
+          $categoryColorGroup.removeClass('error');
+          $categoryNameError.html('');
+          $categoryColorError.html('');
           hasError = false;
           if (!(newCategoryName.length > 0)) {
             $categoryNameGroup.addClass('error');
@@ -206,10 +222,38 @@
             hasError = true;
           }
           if (hasError) return false;
-          if (!(id != null) || id === 0) id = 999;
-          changeCategoryItem(type, id, newCategoryName, newCategoryColorSetID);
-          $categoryDialogSaveButton.off('click');
-          $categoryDialog.modal('hide');
+          $.ajax({
+            url: '/category/action/save.json',
+            type: 'post',
+            data: {
+              name: newCategoryName,
+              colorset: newCategoryColorSetID,
+              type: type,
+              id: id
+            },
+            dataType: 'json',
+            success: function(data) {
+              if (!data.success) {
+                console.log(data.errors);
+                if ((data.errors._common != null) && data.errors._common.length > 0) {
+                  $categoryDialogError.html(data.errors._common.join('<br />')).show();
+                }
+                if (data.errors.name != null) {
+                  $categoryNameGroup.addClass('error');
+                  $categoryNameError.html(data.errors.name.join('<br />'));
+                }
+                if (data.errors.colorset != null) {
+                  $categoryColorGroup.addClass('error');
+                  return $categoryColorError.html(data.errors.colorset.join('<br />'));
+                }
+              } else {
+                changeCategoryItem(type, data.category.id, data.category.name, data.category.color_set);
+                $categoryDialogSaveButton.off('click');
+                return $categoryDialog.modal('hide');
+              }
+            },
+            complete: function(data) {}
+          });
           return false;
         });
       }).on('hidden', function() {
@@ -237,7 +281,6 @@
       }
       $item.data('color', color).text(name).prepend($newItemBaseIcon.clone());
       if (!isSetted) $item.hide().prependTo($target).slideDown();
-      glob.modified = true;
       return null;
     };
     $addMyCategoryBtn.on('click', function() {
@@ -279,7 +322,7 @@
       content: $colorsContainer.clone().html(),
       backLinkText: '戻る',
       crumbDefaultText: '',
-      flyOut: true,
+      maxHeight: 250,
       onSelect: function($item) {
         var colorSetID;
         colorSetID = $item.data('id');
@@ -296,6 +339,68 @@
         return true;
       }
     });
+  });
+
+  this.modified = false;
+
+  $(function() {
+    var $dialog, $message, saveFunc, saveInterval, timer;
+    $dialog = $('<div></div>');
+    $message = $('<p>test</p>');
+    $dialog.append($message);
+    $dialog.css({
+      color: '#fff',
+      display: 'none',
+      position: 'fixed',
+      bottom: 0,
+      right: 0,
+      padding: '5px 10px',
+      'z-index': 9999,
+      'background-color': 'rgba(0,0,0,0.8)'
+    });
+    $message.css({
+      margin: 0,
+      padding: 0
+    });
+    $('body').append($dialog);
+    saveInterval = 1000 * 2;
+    saveFunc = function() {
+      var $items, ids;
+      clearTimeout(timer);
+      if (_this.modified === true) {
+        $items = $('li', _this.favoriteList);
+        ids = [];
+        $items.each(function() {
+          return ids.push($(this).attr('data-id'));
+        });
+        return $.ajax({
+          url: '/category/action/favorite.json',
+          type: 'post',
+          data: {
+            categories: ids
+          },
+          dataType: 'json',
+          success: function(data) {
+            var message;
+            if (!data.success) {
+              return message = 'お気に入りの保存に失敗しました';
+            } else {
+              message = data.time + ' お気に入りを保存しました';
+              $message.text('2012/02/03 15:34:30 お気に入りを保存しました');
+              $dialog.stop().show(1000);
+              setTimeout(function() {
+                $dialog.hide(1000);
+                return setTimeout(saveFunc, saveInterval);
+              }, 1000 * 2);
+              return _this.modified = false;
+            }
+          }
+        });
+      } else {
+        return setTimeout(saveFunc, saveInterval);
+      }
+    };
+    return timer = setTimeout(saveFunc, saveInterval);
   });
 
   /*

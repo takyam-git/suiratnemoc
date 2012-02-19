@@ -2,21 +2,32 @@
 
 class Model_Event extends \Orm\Model
 {
-	protected static $_belongs_to = array(
+	protected static $_belongs_to  = array(
 		'user' => array(
 			'key_from' => 'userid',
 			'model_to' => 'Model_User',
 			'key_to' => 'id',
 			'cascade_save' => true,
 			'cascade_delete' => false,
-		)
+		),
+		'category' => array(
+			'key_from' => 'category',
+	        'model_to' => 'Model_Category',
+	        'key_to' => 'id',
+	        'cascade_save' => true,
+	        'cascade_delete' => false,
+		),
 	);
 	
 	protected static $_properties = array(
 		'id',
 		'userid',
-		'title',
-		'body',
+		'title' => array(
+			'default' => '',
+		),
+		'body' => array(
+			'default' => '',
+		),
 		'start',
 		'end',
 		'category',

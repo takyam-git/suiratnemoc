@@ -1,13 +1,13 @@
 <?php
 
-class Model_Color extends \Orm\Model
+class Model_Category_Favorite extends \Orm\Model
 {
 	protected static $_properties = array(
 		'id',
-		'name',
-		'description',
-		'base_color',
-		'head_color',
+		'user_id',
+		'category_ids' => array(
+			'default' => ''
+		),
 		'created_at',
 		'updated_at'
 	);

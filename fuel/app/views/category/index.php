@@ -28,14 +28,26 @@
 				<p>お気に入りに追加するには、ドラッグ＆ドロップしてください。削除するにはクリックします。</p>
 			</div>
 			<div class="form-search searchbox">
-				<input type="text" class="input-xlarge search-query" placeholder="絞り込み検索">
+				<input type="text" class="search-query" placeholder="絞り込み検索">
 			</div>
 			<div class="categories">
 				<ul class="categoryList" id="favoriteCategoryList">
-					<li data-type="global" data-id="1" data-color="1"><i class="icon-remove icon-white pull-right category-config-icon"></i>global1</li>
+					<?php
+						if(isset($favorite_categories) && is_array($favorite_categories)){
+							foreach($favorite_categories as $favorite_category){
+								$data_type = intval($favorite_category->user_id) === 0 ? 'global' : 'local';
+					?>
+					<li data-type="<?php echo $data_type; ?>" data-id="<?php echo $favorite_category->id; ?>" data-color="<?php echo $favorite_category->color_set; ?>">
+						<i class="icon-remove icon-white pull-right category-config-icon"></i><?php echo $favorite_category->name; ?>
+					</li>
+					<?php
+							}
+						}
+					?>
+					<!-- <li data-type="global" data-id="1" data-color="1"><i class="icon-remove icon-white pull-right category-config-icon"></i>global1</li>
 					<li data-type="global" data-id="2" data-color="2"><i class="icon-remove icon-white pull-right category-config-icon"></i>global2</li>
 					<li data-type="local" data-id="4" data-color="10"><i class="icon-remove icon-white pull-right category-config-icon"></i>local4</li>
-					<li data-type="local" data-id="5" data-color="11"><i class="icon-remove icon-white pull-right category-config-icon"></i>local5</li>
+					<li data-type="local" data-id="5" data-color="11"><i class="icon-remove icon-white pull-right category-config-icon"></i>local5</li> -->
 				</ul>
 			</div>
 		</div>
@@ -48,16 +60,21 @@
 				<p>全ユーザで共有しているカテゴリで、管理者以外編集できません。</p>
 			</div>
 			<div class="form-search searchbox">
-				<input type="text" class="input-xlarge search-query" placeholder="絞り込み検索">
+				<input type="text" class="search-query" placeholder="絞り込み検索">
 			</div>
 			<div class="categories">
 				<ul class="categoryList baseCategoryList">
-					<li id="globalCategory-1" data-type="global" data-id="1" data-color="1"><i class="icon-cog icon-white pull-right category-config-icon"></i>global1</li>
-					<li id="globalCategory-2" data-type="global" data-id="2" data-color="2"><i class="icon-cog icon-white pull-right category-config-icon"></i>global2</li>
-					<li id="globalCategory-3" data-type="global" data-id="3" data-color="3"><i class="icon-cog icon-white pull-right category-config-icon"></i>global3</li>
-					<li id="globalCategory-4" data-type="global" data-id="4" data-color="4"><i class="icon-cog icon-white pull-right category-config-icon"></i>global4</li>
-					<li id="globalCategory-5" data-type="global" data-id="5" data-color="5"><i class="icon-cog icon-white pull-right category-config-icon"></i>global5</li>
-					<li id="globalCategory-6" data-type="global" data-id="6" data-color="6"><i class="icon-cog icon-white pull-right category-config-icon"></i>global6</li>
+					<?php
+						if(is_array($global_categories)){
+							foreach($global_categories as $global_category){
+					?>
+					<li id="globalCategory-<?php echo $global_category->id; ?>" data-type="global" data-id="<?php echo $global_category->id; ?>" data-color="<?php echo $global_category->color_set; ?>">
+						<i class="icon-cog icon-white pull-right category-config-icon"></i><?php echo $global_category->name; ?>
+					</li>
+					<?php
+							}
+						}
+					?>
 				</ul>
 			</div>
 		</div>
@@ -70,20 +87,21 @@
 				<p>あなただけのカテゴリで、他の人が編集したり利用することはできません。</p>
 			</div>
 			<div class="form-search searchbox">
-				<input type="text" class="input-xlarge search-query" placeholder="絞り込み検索">
+				<input type="text" class="search-query" placeholder="絞り込み検索">
 			</div>
 			<div class="categories">
 				<ul class="categoryList baseCategoryList">
-					<li id="localCategory-1" data-type="local" data-id="1" data-color="7"><i class="icon-cog icon-white pull-right category-config-icon"></i>local1</li>
-					<li id="localCategory-2" data-type="local" data-id="2" data-color="8"><i class="icon-cog icon-white pull-right category-config-icon"></i>local2</li>
-					<li id="localCategory-3" data-type="local" data-id="3" data-color="9"><i class="icon-cog icon-white pull-right category-config-icon"></i>local3</li>
-					<li id="localCategory-4" data-type="local" data-id="4" data-color="10"><i class="icon-cog icon-white pull-right category-config-icon"></i>local4</li>
-					<li id="localCategory-5" data-type="local" data-id="5" data-color="11"><i class="icon-cog icon-white pull-right category-config-icon"></i>local5</li>
-					<li id="localCategory-6" data-type="local" data-id="6" data-color="12"><i class="icon-cog icon-white pull-right category-config-icon"></i>local6</li>
-					<li id="localCategory-7" data-type="local" data-id="7" data-color="13"><i class="icon-cog icon-white pull-right category-config-icon"></i>local7</li>
-					<li id="localCategory-8" data-type="local" data-id="8" data-color="14"><i class="icon-cog icon-white pull-right category-config-icon"></i>local8</li>
-					<li id="localCategory-9" data-type="local" data-id="9" data-color="15"><i class="icon-cog icon-white pull-right category-config-icon"></i>local9</li>
-					
+					<?php
+						if(is_array($local_categories)){
+							foreach($local_categories as $local_category){
+					?>
+					<li id="localCategory-<?php echo $local_category->id; ?>" data-type="local" data-id="<?php echo $local_category->id; ?>" data-color="<?php echo $local_category->color_set; ?>">
+						<i class="icon-cog icon-white pull-right category-config-icon"></i><?php echo $local_category->name; ?>
+					</li>
+					<?php
+							}
+						}
+					?>
 				</ul>
 			</div>
 		</div>
@@ -95,6 +113,8 @@
 		<h3 id="modifyCategoryDialogTitle">カテゴリデータ</h3>
 	</div>
 	<div class="modal-body">
+		<div class="alert alert-error" id="categoryDialogError">
+		</div>
 		<form class="form-horizontal">
 			<fieldset>
 				<div class="control-group" id="categoryNameGroup">
@@ -108,7 +128,7 @@
 				<div class="control-group" id="categoryColorGroup">
 					<label class="control-label" for="selectedColorID">カラーセット</label>
 					<div class="controls">
-						<a href="#" class="btn" id="selectColorSet">色を選択する</a>
+						<a href="#" class="btn" id="selectColorSet">デフォルト</a>
 						<input type="hidden" id="selectedColorID" name="selectedColorID" value="" />
 						<span class="help-inline" id="categoryColorError"></span>
 						<span id="categoryColorScreen"></span>
@@ -118,7 +138,24 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a href="#" class="btn btn-primary" id="categoryDialogSaveButton">保存する</a>
+		<a href="#" class="btn btn-danger" style="float:left;" id="categoryDialogRemoveButton"><i class="icon-trash icon-white"></i> 削除する</a>
+		<a href="#" class="btn btn-primary" id="categoryDialogSaveButton"><i class="icon-ok icon-white"></i> 保存する</a>
+		<a class="btn" data-dismiss="modal">キャンセル</a>
+	</div>
+</div>
+<div id="removeCategoryDialog" class="modal">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		<h3 id="removeCategoryDialogTitle">カテゴリの削除</h3>
+	</div>
+	<div class="modal-body">
+		<div class="alert alert-error" id="removeCategoryDialogError">
+		</div>
+		<p>このカテゴリを本当に削除してもよろしいですか？</p>
+		<small>※削除すると、復活させる事ができません</small>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn btn-danger" id="categoryDialogRemoveDoButton"><i class="icon-trash icon-white"></i> 削除する</a>
 		<a class="btn" data-dismiss="modal">キャンセル</a>
 	</div>
 </div>

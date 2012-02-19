@@ -2,6 +2,13 @@
 String.prototype.trim = ->
   return @.replace(/^(\s|　)+|(\s|　)+$/g, '')
 
+String.prototype.htmldecode = ->
+  return @.replace(/\&amp\;/g,'&')
+          .replace(/\&quot\;/g,'"')
+          .replace(/\&\#039\;/g,'\'')
+          .replace(/\&lt\;/g,'<')
+          .replace(/\&gt\;/g,'>');
+
 $(window).load ->
   #categoryHeaderの高さを揃える
   $categoryHeaders = $('.categoryHeader')
@@ -28,6 +35,8 @@ $ =>
   $addMyCategoryBtn = $('a#add-my-category-btn')
   $addGlobalCategoryBtn = $('a#add-global-category-btn')
   
+  @favoriteList = $favoriteList
+  
   #DOM Objectの生成
   $removeIcon = $('<i class="icon-remove icon-white pull-right category-config-icon"></i>')
   
@@ -39,6 +48,7 @@ $ =>
       $('li[data-type="' + $this.data('type') + '"][data-id="' + $this.data('id') + '"]', $baseCategoryList)
         .removeClass(listFavoriteClassName).draggable(listDraggableOption)
       $this.remove()
+      glob.modified = true
     return false;
   
   #お気に入り追加済みのグローバル/マイカテゴリのクラス
@@ -76,7 +86,7 @@ $ =>
         
         #クリックしたらお気に入りから削除して、元イベントの状態をもとに戻す
         $newFavorite.on('click', favoriteItemClickFunc)
-        glob.modified = true
+        #glob.modified = true
       else
         ui.helper.remove()
       
@@ -88,6 +98,7 @@ $ =>
   #カテゴリのFavoriteへの追加処理
   $favoriteList.sortable({
     revert: true
+    placeholder: 'sortable-placeholder'
     start: ->
       draggingFlag = true
       null #null返さないとsortableがコケる
@@ -101,8 +112,10 @@ $ =>
 
   #カテゴリダイアログ関連のDOMの取得と設定
   $categoryDialog = $('#modifyCategoryDialog')
+  $categoryDialogError = $('#categoryDialogError', $categoryDialog)
   $categoryDialogTitle = $('#modifyCategoryDialogTitle', $categoryDialog)
   $categoryDialogSaveButton = $('#categoryDialogSaveButton', $categoryDialog)
+  $categoryDialogRemoveButton = $('#categoryDialogRemoveButton', $categoryDialog)
   $categoryNameGroup = $('#categoryNameGroup', $categoryDialog)
   $categoryNameField = $('#categoryName', $categoryNameGroup)
   $categoryNameError = $('#categoryNameError', $categoryNameGroup)
@@ -111,9 +124,17 @@ $ =>
   $categoryColorField = $('#selectedColorID', $categoryColorGroup)
   $categoryColorError = $('#categoryColorError', $categoryColorGroup)
   $categoryColorScreen = $('#categoryColorScreen', $categoryDialog)
+  # $categoryDescriptionGroup = $('#categoryDescriptionGroup', $categoryDialog)
+  # $categoryDescriptionField = $('#categoryDescription', $categoryNameGroup)
+  # $categoryDescriptionError = $('#categoryDescriptionError', $categoryNameGroup)
+  # $categoryDescriptionScreen = $('#categoryDescriptionScreen', $categoryDialog)
   $colorsContainer = $('#colorSetList')
   $triggerButton = $('#selectColorSet')
   defaultButtonText = $triggerButton.text()
+  
+  $removeCategoryDialog = $('#removeCategoryDialog');
+  $removeCategoryDoButton =$('#categoryDialogRemoveDoButton', $removeCategoryDialog)
+  $removeCategoryError = $('#removeCategoryDialogError', $removeCategoryDialog)
   
   #カテゴリ変更ダイアログ　クリック時にダイアログを開く
   openCategoryDialog = (type, id) ->
@@ -137,7 +158,7 @@ $ =>
       if !($item.length > 0)
         return false
       
-      name = $item.text()
+      name = $item.text().trim().htmldecode();
       colorSetID = parseInt($item.data('color'))
       
     else
@@ -164,6 +185,8 @@ $ =>
     
     #保存ボタンクリック時の動作
     $categoryDialog.off('shown').on('shown', ->
+      $categoryDialogError.hide()
+      
       $categoryNameGroup.removeClass('error')
       $categoryColorGroup.removeClass('error')
       $categoryNameError.text('')
@@ -185,9 +208,54 @@ $ =>
         $triggerButton.show()
         $categoryDialogSaveButton.show()
       
-      $categoryDialogSaveButton.click(->
+      #カテゴリの削除
+      $categoryDialogRemoveButton.off('click').on('click', ->
+        $removeCategoryError.html('').hide();
+        $categoryDialog.modal('hide')
+        $removeCategoryDialog.off('shown').on('shown', ->
+          $removeCategoryDoButton.on('click', ->
+            $.ajax({
+              url: '/category/action/remove.json'
+              type: 'post'
+              data: {
+                id: id
+              }
+              dataType: 'json'
+              success: (data) ->
+                if !data.success
+                  errors = []
+                  for key, ary of data.errors
+                    for err in ary
+                      errors.push(err)
+                  $removeCategoryError.append($('<p>' + errors.join('<br>') + '</p>')).show()
+                else
+                  $('li[data-type="' + type + '"][data-id="' + id + '"]').slideUp('fast', ->
+                    $(this).remove()
+                  );
+                  $removeCategoryDialog.modal('hide')
+              complete: (data) ->
+                
+            })
+            
+            false
+          )
+        ).on('hidden', ->
+        ).modal();
+        
+        false
+      )
+      
+      #カテゴリの編集・追加
+      $categoryDialogSaveButton.on('click', ->
         newCategoryName = $categoryNameField.val().trim()
         newCategoryColorSetID = $categoryColorField.val()
+        #newCategoryDescription = $categoryDescriptionField.val()
+        
+        $categoryDialogError.html('').hide()
+        $categoryNameGroup.removeClass('error')
+        $categoryColorGroup.removeClass('error')
+        $categoryNameError.html('')
+        $categoryColorError.html('')
         
         #localValidation
         hasError = false
@@ -200,14 +268,35 @@ $ =>
           return false
         
         #ここでajaxでvalidateとsaveの処理
+        $.ajax({
+          url: '/category/action/save.json'
+          type: 'post'
+          data: {
+            name: newCategoryName
+            colorset: newCategoryColorSetID
+            type: type
+            id: id
+          }
+          dataType: 'json'
+          success: (data) ->
+            if !data.success
+              console.log data.errors
+              if data.errors._common? and data.errors._common.length > 0
+                $categoryDialogError.html(data.errors._common.join('<br />')).show();
+              if data.errors.name?
+                $categoryNameGroup.addClass('error')
+                $categoryNameError.html(data.errors.name.join('<br />'))
+              if data.errors.colorset?
+                $categoryColorGroup.addClass('error')
+                $categoryColorError.html(data.errors.colorset.join('<br />'))
+            else
+              changeCategoryItem(type, data.category.id, data.category.name, data.category.color_set)
+              $categoryDialogSaveButton.off('click')
+              $categoryDialog.modal('hide')
+          complete: (data) ->
+            
+        })
         
-        #成功した場合カテゴリアイテムを更新する
-        id = 999 if !(id?) || id is 0 #this is for debug
-        changeCategoryItem(type, id, newCategoryName, newCategoryColorSetID)
-        
-        $categoryDialogSaveButton.off('click')
-        
-        $categoryDialog.modal('hide')
         false
       )
     ).on('hidden', ->
@@ -254,7 +343,7 @@ $ =>
         .prependTo($target)
         .slideDown()
           
-    glob.modified = true
+    #glob.modified = true
     
     null
     
