@@ -171,7 +171,7 @@
           $removeCategoryError.html('').hide();
           $categoryDialog.modal('hide');
           $removeCategoryDialog.off('shown').on('shown', function() {
-            return $removeCategoryDoButton.on('click', function() {
+            return $removeCategoryDoButton.off('click').on('click', function() {
               $.ajax({
                 url: '/category/action/remove.json',
                 type: 'post',

@@ -55,12 +55,12 @@
           $removeCategoryError.html('').hide();
           $dialogContent.modal('hide');
           $removeCategoryDialog.off('shown').on('shown', function() {
-            return $('#categoryDialogRemoveDoButton', this.$removeButton).on('click', function() {
+            return $('#categoryDialogRemoveDoButton', this.$removeButton).off('click').on('click', function() {
               $.ajax({
-                url: '/category/event/remove.json',
+                url: '/calendar/event/remove.json',
                 type: 'post',
                 data: {
-                  id: id
+                  id: calEvent.id
                 },
                 dataType: 'json',
                 success: function(data) {
@@ -77,9 +77,7 @@
                     }
                     return $removeCategoryError.append($('<p>' + errors.join('<br>') + '</p>')).show();
                   } else {
-                    $('li[data-type="' + type + '"][data-id="' + id + '"]').slideUp('fast', function() {
-                      return $(this).remove();
-                    });
+                    $calendar.weekCalendar("removeEvent", calEvent.id);
                     return $removeCategoryDialog.modal('hide');
                   }
                 },
@@ -106,7 +104,6 @@
             url: '/calendar/event/update.json',
             success: function(data) {
               var err, errorHtml, _i, _len, _ref;
-              console.log(data);
               if (((data != null ? data.success : void 0) != null) && data.success === true) {
                 calEvent.id = data.event.id;
                 calEvent.start = new Date(data.event.start);

@@ -50,7 +50,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</a>
-					<a class="brand" href="/">Suiratnemoc</a>
+					<a class="brand" href="/">すもっく！</a>
 					<div class="nav-collapse">
 						<ul class="nav">
 							<li class="<?php echo strpos(Uri::string(), 'calendar') === 0 ? 'active' : '' ?>">

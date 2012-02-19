@@ -109,4 +109,58 @@ class Controller_Calendar_Event extends Controller_Restbase{
 		}
 		$this->response($data);
 	}
+
+	/**
+	 * イベントの削除
+	 */
+	public function post_remove(){
+		$data = array(
+			'success' => false,
+			'errors' => array(
+				'_common' => array(),
+			),
+		);
+		$hasError = false;
+		if(empty($this->current_user_id)){
+			$data['errors']['_common'][] = 'can\'t get user id';
+		}else{
+			$val = Validation::forge();
+			$val->add('id', 'イベントID')->add_rule('required');
+			
+			if($val->run() && !$hasError){
+				
+				$id = intval(Input::post('id'));
+				if($id > 0){
+					$event = Model_Event::find_by_id($id);
+					if(is_object($event)){
+						$user_id = intval($event->userid);
+						if($user_id !== intval($this->current_user_id)){
+							$data['errors']['_common'][] = 'あなたは、あなたのイベント以外削除できません';
+						}else{
+							if($event->delete()){
+								$data['success'] = true;
+							}else{
+								$data['errors']['_common'][] = 'イベントの削除に失敗しました';
+							}
+						}
+					}else{
+						$data['errors']['_common'][] = '存在しないイベントが指定されています';
+					}
+				}else{
+					$data['errors']['_common'][] = '不正なイベントが指定されています';
+				}
+			}else{
+				if($errors = $val->error()){
+					$data['errors'] = array();
+					foreach($errors as $field => $error){
+						if(!isset($data['errors'][$field]) || !is_array($data['errors'][$field])){
+							$data['errors'][$field] = array();
+						}
+						$data['errors'][$field][] = $error->get_message();
+					}
+				}
+			}
+		}
+		$this->response($data);
+	}
 }

@@ -41,7 +41,7 @@ class Controller_Auth extends Controller_Base
 			}
 		}
 		
-		if($errors = $val->errors()){
+		if($errors = $val->error()){
 			foreach($errors as $error){
 				$error_msg .= $error->get_message(false, '', '<br>');
 			}
@@ -93,7 +93,7 @@ class Controller_Auth extends Controller_Base
 			}
 		}
 		
-		if($errors = $val->errors()){
+		if($errors = $val->error()){
 			foreach($errors as $error){
 				$error_msg .= $error->get_message(false, '', '<br>');
 			}

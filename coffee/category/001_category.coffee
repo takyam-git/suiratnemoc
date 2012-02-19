@@ -213,7 +213,7 @@ $ =>
         $removeCategoryError.html('').hide();
         $categoryDialog.modal('hide')
         $removeCategoryDialog.off('shown').on('shown', ->
-          $removeCategoryDoButton.on('click', ->
+          $removeCategoryDoButton.off('click').on('click', ->
             $.ajax({
               url: '/category/action/remove.json'
               type: 'post'

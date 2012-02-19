@@ -34,5 +34,6 @@
 					</div>
 				</fieldset>
 		 </form>
+		 <p><a href="/auth/new">新規登録はこちら</a></p>
 	</div>
 </div>

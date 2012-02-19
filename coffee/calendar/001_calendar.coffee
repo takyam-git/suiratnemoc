@@ -67,12 +67,12 @@ $(document).ready =>
         $removeCategoryError.html('').hide();
         $dialogContent.modal('hide')
         $removeCategoryDialog.off('shown').on('shown', ->
-          $('#categoryDialogRemoveDoButton', @$removeButton).on('click', ->
+          $('#categoryDialogRemoveDoButton', @$removeButton).off('click').on('click', ->
             $.ajax({
-              url: '/category/event/remove.json'
+              url: '/calendar/event/remove.json'
               type: 'post'
               data: {
-                id: id
+                id: calEvent.id
               }
               dataType: 'json'
               success: (data) ->
@@ -83,9 +83,7 @@ $(document).ready =>
                       errors.push(err)
                   $removeCategoryError.append($('<p>' + errors.join('<br>') + '</p>')).show()
                 else
-                  $('li[data-type="' + type + '"][data-id="' + id + '"]').slideUp('fast', ->
-                    $(this).remove()
-                  );
+                  $calendar.weekCalendar("removeEvent", calEvent.id)
                   $removeCategoryDialog.modal('hide')
               complete: (data) ->
                 
@@ -117,7 +115,6 @@ $(document).ready =>
           type: 'post'
           url: '/calendar/event/update.json'
           success: (data) ->
-            console.log data
             if data?.success? && data.success is true
               calEvent.id = data.event.id;
               calEvent.start = new Date(data.event.start)
