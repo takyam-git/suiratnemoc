@@ -2,6 +2,14 @@
 
 class Controller_Summary extends Controller_Base
 {
+	public function before(){
+		parent::before();
+
+		if ( ! Auth::check() ){
+			Response::redirect('auth/login');
+		}
+		
+	}
 
 	public function action_index($date = null, $date2 = null)
 	{
