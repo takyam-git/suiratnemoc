@@ -144,6 +144,10 @@ $ =>
   $categoryColorField = $('#selectedColorID', $categoryColorGroup)
   $categoryColorError = $('#categoryColorError', $categoryColorGroup)
   $categoryColorScreen = $('#categoryColorScreen', $categoryDialog)
+  $categoryIncludeGroup = $('#categoryIncludeGroup', $categoryDialog)
+  $categoryIncludeField = $('#categoryInclude', $categoryIncludeGroup)
+  $categoryIncludeError = $('#categoryIncludeError', $categoryIncludeGroup)
+  $categoryIncludeScreen = $('#categoryIncludeScreen', $categoryIncludeGroup)
   # $categoryDescriptionGroup = $('#categoryDescriptionGroup', $categoryDialog)
   # $categoryDescriptionField = $('#categoryDescription', $categoryNameGroup)
   # $categoryDescriptionError = $('#categoryDescriptionError', $categoryNameGroup)
@@ -180,18 +184,26 @@ $ =>
       
       name = $item.text().trim().htmldecode();
       colorSetID = parseInt($item.data('color'))
+      include = parseInt($item.attr('data-include')) is 1
       
     else
       mode = 'add'
       titleSuffix = '追加'
       id = 0
+      include = false
       
       name = ''
       colorSetID = 0
+      include = false
     
     #ダイアログの各フィールドを更新
     $categoryNameField.val(name)
     $categoryColorField.val(colorSetID)
+    
+    if include
+      $categoryIncludeField.removeAttr('checked')
+    else
+      $categoryIncludeField.attr('checked', true)
     
     #カラー選択ボタンの表示テキストを更新
     $selectedColor = $('li a[data-id="' + colorSetID + '"]', $colorsContainer)
@@ -209,24 +221,35 @@ $ =>
       
       $categoryNameGroup.removeClass('error')
       $categoryColorGroup.removeClass('error')
+      $categoryIncludeGroup.removeClass('error')
       $categoryNameError.text('')
       $categoryColorError.text('')
+      $categoryIncludeError.text('')
 
       $categoryNameScreen.text($categoryNameField.val())
       $categoryColorScreen.text($triggerButton.text())
       
+      if $categoryIncludeField.is('checked')
+        $categoryIncludeScreen.text('表示する')
+      else
+        $categoryIncludeScreen.text('表示しない')
+      
       if type is 'global' and isAdmin is false
         $categoryNameScreen.show()
         $categoryColorScreen.show()
+        $categoryIncludeScreen.show()
         $categoryNameField.hide()
         $triggerButton.hide()
         $categoryDialogSaveButton.hide()
+        $categoryIncludeField.hide()
       else
         $categoryNameScreen.hide()
         $categoryColorScreen.hide()
+        $categoryIncludeScreen.hide()
         $categoryNameField.show()
         $triggerButton.show()
         $categoryDialogSaveButton.show()
+        $categoryIncludeField.show()
       
       #カテゴリの削除
       $categoryDialogRemoveButton.off('click').on('click', ->
@@ -269,13 +292,16 @@ $ =>
       $categoryDialogSaveButton.on('click', ->
         newCategoryName = $categoryNameField.val().trim()
         newCategoryColorSetID = $categoryColorField.val()
+        newCategoryInclude = $categoryIncludeField.val()
         #newCategoryDescription = $categoryDescriptionField.val()
         
         $categoryDialogError.html('').hide()
         $categoryNameGroup.removeClass('error')
         $categoryColorGroup.removeClass('error')
+        $categoryIncludeGroup.removeClass('error')
         $categoryNameError.html('')
         $categoryColorError.html('')
+        $categoryIncludeError.html('')
         
         #localValidation
         hasError = false
@@ -286,6 +312,7 @@ $ =>
         
         if hasError
           return false
+
         
         #ここでajaxでvalidateとsaveの処理
         $.ajax({
@@ -296,21 +323,26 @@ $ =>
             colorset: newCategoryColorSetID
             type: type
             id: id
+            include: if $categoryIncludeField.is(':checked') then 0 else 1
           }
           dataType: 'json'
           success: (data) ->
             if !data.success
-              console.log data.errors
-              if data.errors._common? and data.errors._common.length > 0
-                $categoryDialogError.html(data.errors._common.join('<br />')).show();
-              if data.errors.name?
-                $categoryNameGroup.addClass('error')
-                $categoryNameError.html(data.errors.name.join('<br />'))
-              if data.errors.colorset?
-                $categoryColorGroup.addClass('error')
-                $categoryColorError.html(data.errors.colorset.join('<br />'))
+              
+              if data?.errors?
+                if data.errors._common? and data.errors._common.length > 0
+                  $categoryDialogError.html(data.errors._common.join('<br />')).show();
+                if data.errors.name?
+                  $categoryNameGroup.addClass('error')
+                  $categoryNameError.html(data.errors.name.join('<br />'))
+                if data.errors.colorset?
+                  $categoryColorGroup.addClass('error')
+                  $categoryColorError.html(data.errors.colorset.join('<br />'))
+                if data.errors.include?
+                  $categoryIncludeGroup.addClass('error')
+                  $categoryIncludeError.html(data.errors.include.join('<br />'))
             else
-              changeCategoryItem(type, data.category.id, data.category.name, data.category.color_set)
+              changeCategoryItem(type, data.category.id, data.category.name, data.category.color_set, data.category.in_summary)
               $categoryDialogSaveButton.off('click')
               $categoryDialog.modal('hide')
           complete: (data) ->
@@ -327,7 +359,7 @@ $ =>
   #<li id="localCategory-9" data-type="local" data-id="9"><i class="icon-cog icon-white pull-right category-config-icon"></i>local9</li>
   $newItemBase = $('<li></li>')
   $newItemBaseIcon = $('<i class="icon-cog icon-white pull-right category-config-icon"></i>')
-  changeCategoryItem = (type, id, name, color) ->
+  changeCategoryItem = (type, id, name, color, in_summary) ->
     #IDが取得できない場合何もしない
     if !(id? && (id = parseInt(id)) > 0)
       return false
@@ -348,12 +380,15 @@ $ =>
         .attr('id', type + 'Category-' + id)
         .attr('data-id', id)
         .attr('data-type', type)
+        .attr('data-include', in_summary)
         .draggable(listDraggableOption)
         .on('click', itemClickFunc)
     else
       $item = $beenItem
-    
-    $item.data('color', color)
+      
+    $item
+      .attr('data-color', color)
+      .attr('data-include', in_summary)
       .text(name)
       .prepend($newItemBaseIcon.clone())
     

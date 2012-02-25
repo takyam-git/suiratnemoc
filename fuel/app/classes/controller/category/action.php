@@ -26,6 +26,7 @@ class Controller_Category_Action extends Controller_Restbase{
 				->add_rule('valid_string', array('numeric'));
 			$val->add('type', 'type')->add_rule('required')
 				->add_rule('match_pattern', '/^(global|local)$/');
+			$val->add('include', 'include')->add_rule('valid_string', array('numeric'));
 			
 			//globalカテゴリはadminユーザーのみ許可
 			$is_global = false; 
@@ -79,6 +80,13 @@ class Controller_Category_Action extends Controller_Restbase{
 					$category->name = Input::post('name');
 					$category->color_set = Input::post('colorset');
 					$category->description = '';
+
+					if(intval(Input::post('include')) > 0){
+						$category->in_summary = 1;
+					}else{
+						$category->in_summary = 0;
+					}
+					
 					switch(Input::post('type')){
 						case 'global':
 							$category->user_id = 0;
@@ -93,6 +101,7 @@ class Controller_Category_Action extends Controller_Restbase{
 							'id' => $category->id,
 							'name' => $category->name,
 							'color_set' => $category->color_set,
+							'in_summary' => $category->in_summary,
 						);
 					}else{
 						$data['_common'][] = 'カテゴリの保存に失敗しました';

@@ -61,7 +61,11 @@ class Controller_Summary extends Controller_Base
 					->where('start', '>=', $start)
 					->where('end', '<=', $end)
 					->order_by('start', 'asc')
-					->related('category');
+					->related('category', array(
+						'where' => array(
+							array('in_summary', '=', 1),
+						),
+					));
 					
 		$event_objects = $query->get();
 		

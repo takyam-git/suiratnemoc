@@ -82,7 +82,7 @@
 							</a>
 							<ul class="dropdown-menu">
 								<?php
-									if($current_user){
+									if(isset($current_user) && $current_user){
 								?>
 									<!-- <li><a href="/auth/profile">プロフィールの変更</a></li> -->
 									<li><a href="/auth/logout">ログアウト</a></li>

@@ -14,6 +14,9 @@ class Model_Category extends \Orm\Model
 		'deleted' => array(
             'default' => 0,
         ),
+        'in_summary' => array(
+        	'default' => 1,
+		),
 		'created_at',
 		'updated_at'
 	);

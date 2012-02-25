@@ -37,7 +37,7 @@
 							foreach($favorite_categories as $favorite_category){
 								$data_type = intval($favorite_category->user_id) === 0 ? 'global' : 'local';
 					?>
-					<li data-type="<?php echo $data_type; ?>" data-id="<?php echo $favorite_category->id; ?>" data-color="<?php echo $favorite_category->color_set; ?>">
+					<li data-type="<?php echo $data_type; ?>" data-id="<?php echo $favorite_category->id; ?>" data-color="<?php echo $favorite_category->color_set; ?>" data-include="<?php echo $favorite_category->in_summary?>">
 						<i class="icon-remove icon-white pull-right category-config-icon"></i><?php echo $favorite_category->name; ?>
 					</li>
 					<?php
@@ -68,7 +68,7 @@
 						if(is_array($global_categories)){
 							foreach($global_categories as $global_category){
 					?>
-					<li id="globalCategory-<?php echo $global_category->id; ?>" data-type="global" data-id="<?php echo $global_category->id; ?>" data-color="<?php echo $global_category->color_set; ?>">
+					<li id="globalCategory-<?php echo $global_category->id; ?>" data-type="global" data-id="<?php echo $global_category->id; ?>" data-color="<?php echo $global_category->color_set; ?>" data-include="<?php echo $global_category->in_summary?>">
 						<i class="icon-cog icon-white pull-right category-config-icon"></i><?php echo $global_category->name; ?>
 					</li>
 					<?php
@@ -95,7 +95,7 @@
 						if(is_array($local_categories)){
 							foreach($local_categories as $local_category){
 					?>
-					<li id="localCategory-<?php echo $local_category->id; ?>" data-type="local" data-id="<?php echo $local_category->id; ?>" data-color="<?php echo $local_category->color_set; ?>">
+					<li id="localCategory-<?php echo $local_category->id; ?>" data-type="local" data-id="<?php echo $local_category->id; ?>" data-color="<?php echo $local_category->color_set; ?>" data-include="<?php echo $local_category->in_summary?>">
 						<i class="icon-cog icon-white pull-right category-config-icon"></i><?php echo $local_category->name; ?>
 					</li>
 					<?php
@@ -132,6 +132,17 @@
 						<input type="hidden" id="selectedColorID" name="selectedColorID" value="" />
 						<span class="help-inline" id="categoryColorError"></span>
 						<span id="categoryColorScreen"></span>
+					</div>
+				</div>
+				<div class="control-group" id="categoryIncludeGroup">
+					<label class="control-label" for="categoryInclude">サマリーに表示する</label>
+					<div class="controls">
+                		<label>
+                			<input type="checkbox" id="categoryInclude" name="categoryInclude" value="1">
+                			サマリーに表示しない
+                		</label>
+						<span class="help-inline" id="categoryIncludeError"></span>
+						<span id="categoryIncludeScreen"></span>
 					</div>
 				</div>
 			</fieldset>

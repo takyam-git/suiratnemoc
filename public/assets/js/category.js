@@ -24,7 +24,7 @@
   });
 
   $(function() {
-    var $addGlobalCategoryBtn, $addMyCategoryBtn, $baseCategoryList, $baseCategoryListItems, $categoryColorError, $categoryColorField, $categoryColorGroup, $categoryColorScreen, $categoryDialog, $categoryDialogError, $categoryDialogRemoveButton, $categoryDialogSaveButton, $categoryDialogTitle, $categoryNameError, $categoryNameField, $categoryNameGroup, $categoryNameScreen, $colorsContainer, $favoriteList, $favoriteListItems, $globalList, $myList, $newItemBase, $newItemBaseIcon, $removeCategoryDialog, $removeCategoryDoButton, $removeCategoryError, $removeIcon, $triggerButton, changeCategoryItem, defaultButtonText, draggingFlag, favoriteItemClickFunc, glob, isAdmin, itemClickFunc, listDraggableOption, listFavoriteClassName, openCategoryDialog, saveMyFavorites;
+    var $addGlobalCategoryBtn, $addMyCategoryBtn, $baseCategoryList, $baseCategoryListItems, $categoryColorError, $categoryColorField, $categoryColorGroup, $categoryColorScreen, $categoryDialog, $categoryDialogError, $categoryDialogRemoveButton, $categoryDialogSaveButton, $categoryDialogTitle, $categoryIncludeError, $categoryIncludeField, $categoryIncludeGroup, $categoryIncludeScreen, $categoryNameError, $categoryNameField, $categoryNameGroup, $categoryNameScreen, $colorsContainer, $favoriteList, $favoriteListItems, $globalList, $myList, $newItemBase, $newItemBaseIcon, $removeCategoryDialog, $removeCategoryDoButton, $removeCategoryError, $removeIcon, $triggerButton, changeCategoryItem, defaultButtonText, draggingFlag, favoriteItemClickFunc, glob, isAdmin, itemClickFunc, listDraggableOption, listFavoriteClassName, openCategoryDialog, saveMyFavorites;
     glob = _this;
     isAdmin = $('#is_admin_flag').data('isadmin') === 1;
     $baseCategoryList = $('.baseCategoryList');
@@ -127,6 +127,10 @@
     $categoryColorField = $('#selectedColorID', $categoryColorGroup);
     $categoryColorError = $('#categoryColorError', $categoryColorGroup);
     $categoryColorScreen = $('#categoryColorScreen', $categoryDialog);
+    $categoryIncludeGroup = $('#categoryIncludeGroup', $categoryDialog);
+    $categoryIncludeField = $('#categoryInclude', $categoryIncludeGroup);
+    $categoryIncludeError = $('#categoryIncludeError', $categoryIncludeGroup);
+    $categoryIncludeScreen = $('#categoryIncludeScreen', $categoryIncludeGroup);
     $colorsContainer = $('#colorSetList');
     $triggerButton = $('#selectColorSet');
     defaultButtonText = $triggerButton.text();
@@ -134,7 +138,7 @@
     $removeCategoryDoButton = $('#categoryDialogRemoveDoButton', $removeCategoryDialog);
     $removeCategoryError = $('#removeCategoryDialogError', $removeCategoryDialog);
     openCategoryDialog = function(type, id) {
-      var $item, $list, $selectedColor, colorSetID, mode, name, titlePrefix, titleSuffix;
+      var $item, $list, $selectedColor, colorSetID, include, mode, name, titlePrefix, titleSuffix;
       if (type === 'global') {
         titlePrefix = 'グローバル';
         $list = $globalList;
@@ -151,15 +155,23 @@
         if (!($item.length > 0)) return false;
         name = $item.text().trim().htmldecode();
         colorSetID = parseInt($item.data('color'));
+        include = parseInt($item.attr('data-include')) === 1;
       } else {
         mode = 'add';
         titleSuffix = '追加';
         id = 0;
+        include = false;
         name = '';
         colorSetID = 0;
+        include = false;
       }
       $categoryNameField.val(name);
       $categoryColorField.val(colorSetID);
+      if (include) {
+        $categoryIncludeField.removeAttr('checked');
+      } else {
+        $categoryIncludeField.attr('checked', true);
+      }
       $selectedColor = $('li a[data-id="' + colorSetID + '"]', $colorsContainer);
       if ($selectedColor.length > 0) {
         $triggerButton.text($selectedColor.data('name'));
@@ -171,22 +183,33 @@
         $categoryDialogError.hide();
         $categoryNameGroup.removeClass('error');
         $categoryColorGroup.removeClass('error');
+        $categoryIncludeGroup.removeClass('error');
         $categoryNameError.text('');
         $categoryColorError.text('');
+        $categoryIncludeError.text('');
         $categoryNameScreen.text($categoryNameField.val());
         $categoryColorScreen.text($triggerButton.text());
+        if ($categoryIncludeField.is('checked')) {
+          $categoryIncludeScreen.text('表示する');
+        } else {
+          $categoryIncludeScreen.text('表示しない');
+        }
         if (type === 'global' && isAdmin === false) {
           $categoryNameScreen.show();
           $categoryColorScreen.show();
+          $categoryIncludeScreen.show();
           $categoryNameField.hide();
           $triggerButton.hide();
           $categoryDialogSaveButton.hide();
+          $categoryIncludeField.hide();
         } else {
           $categoryNameScreen.hide();
           $categoryColorScreen.hide();
+          $categoryIncludeScreen.hide();
           $categoryNameField.show();
           $triggerButton.show();
           $categoryDialogSaveButton.show();
+          $categoryIncludeField.show();
         }
         $categoryDialogRemoveButton.off('click').on('click', function() {
           $removeCategoryError.html('').hide();
@@ -228,14 +251,17 @@
           return false;
         });
         return $categoryDialogSaveButton.on('click', function() {
-          var hasError, newCategoryColorSetID, newCategoryName;
+          var hasError, newCategoryColorSetID, newCategoryInclude, newCategoryName;
           newCategoryName = $categoryNameField.val().trim();
           newCategoryColorSetID = $categoryColorField.val();
+          newCategoryInclude = $categoryIncludeField.val();
           $categoryDialogError.html('').hide();
           $categoryNameGroup.removeClass('error');
           $categoryColorGroup.removeClass('error');
+          $categoryIncludeGroup.removeClass('error');
           $categoryNameError.html('');
           $categoryColorError.html('');
+          $categoryIncludeError.html('');
           hasError = false;
           if (!(newCategoryName.length > 0)) {
             $categoryNameGroup.addClass('error');
@@ -250,25 +276,31 @@
               name: newCategoryName,
               colorset: newCategoryColorSetID,
               type: type,
-              id: id
+              id: id,
+              include: $categoryIncludeField.is(':checked') ? 0 : 1
             },
             dataType: 'json',
             success: function(data) {
               if (!data.success) {
-                console.log(data.errors);
-                if ((data.errors._common != null) && data.errors._common.length > 0) {
-                  $categoryDialogError.html(data.errors._common.join('<br />')).show();
-                }
-                if (data.errors.name != null) {
-                  $categoryNameGroup.addClass('error');
-                  $categoryNameError.html(data.errors.name.join('<br />'));
-                }
-                if (data.errors.colorset != null) {
-                  $categoryColorGroup.addClass('error');
-                  return $categoryColorError.html(data.errors.colorset.join('<br />'));
+                if ((data != null ? data.errors : void 0) != null) {
+                  if ((data.errors._common != null) && data.errors._common.length > 0) {
+                    $categoryDialogError.html(data.errors._common.join('<br />')).show();
+                  }
+                  if (data.errors.name != null) {
+                    $categoryNameGroup.addClass('error');
+                    $categoryNameError.html(data.errors.name.join('<br />'));
+                  }
+                  if (data.errors.colorset != null) {
+                    $categoryColorGroup.addClass('error');
+                    $categoryColorError.html(data.errors.colorset.join('<br />'));
+                  }
+                  if (data.errors.include != null) {
+                    $categoryIncludeGroup.addClass('error');
+                    return $categoryIncludeError.html(data.errors.include.join('<br />'));
+                  }
                 }
               } else {
-                changeCategoryItem(type, data.category.id, data.category.name, data.category.color_set);
+                changeCategoryItem(type, data.category.id, data.category.name, data.category.color_set, data.category.in_summary);
                 $categoryDialogSaveButton.off('click');
                 return $categoryDialog.modal('hide');
               }
@@ -283,7 +315,7 @@
     };
     $newItemBase = $('<li></li>');
     $newItemBaseIcon = $('<i class="icon-cog icon-white pull-right category-config-icon"></i>');
-    changeCategoryItem = function(type, id, name, color) {
+    changeCategoryItem = function(type, id, name, color, in_summary) {
       var $beenItem, $item, $target, isSetted;
       if (!((id != null) && (id = parseInt(id)) > 0)) return false;
       if (type === 'global') {
@@ -296,11 +328,11 @@
       $beenItem = $('li[data-id="' + id + '"]', $target);
       isSetted = $beenItem.length > 0;
       if (!isSetted) {
-        $item = $newItemBase.clone().attr('id', type + 'Category-' + id).attr('data-id', id).attr('data-type', type).draggable(listDraggableOption).on('click', itemClickFunc);
+        $item = $newItemBase.clone().attr('id', type + 'Category-' + id).attr('data-id', id).attr('data-type', type).attr('data-include', in_summary).draggable(listDraggableOption).on('click', itemClickFunc);
       } else {
         $item = $beenItem;
       }
-      $item.data('color', color).text(name).prepend($newItemBaseIcon.clone());
+      $item.attr('data-color', color).attr('data-include', in_summary).text(name).prepend($newItemBaseIcon.clone());
       if (!isSetted) $item.hide().prependTo($target).slideDown();
       return null;
     };

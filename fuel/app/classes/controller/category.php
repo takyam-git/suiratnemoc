@@ -25,8 +25,8 @@ class Controller_Category extends Controller_Base
 			'category.js',
 		)));
 		
-		$select = array('id', 'user_id', 'name', 'description', 'color_set');
-		$order_by = array('updated_at' => 'desc');
+		$select = array('id', 'user_id', 'name', 'description', 'color_set', 'in_summary');
+		$order_by = array('created_at' => 'desc');
 		$favorite_categories = null;
 		$user_favorites = Model_Category_Favorite::find_by_user_id($this->current_user_id);
 		if(is_object($user_favorites)){
