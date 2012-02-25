@@ -69,7 +69,7 @@ class Controller_Calendar extends Controller_Base
 			'order_by' => $order_by,
 		));
 
-		$this->template->title = 'Calendar &raquo; Index';
+		$this->template->title = 'カレンダー';
 		$this->template->content = View::forge('calendar/index', array(
 			'favorite_categories' => $favorite_categories,
 			'global_categories' => $global_categories,

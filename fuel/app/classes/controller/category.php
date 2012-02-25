@@ -66,7 +66,7 @@ class Controller_Category extends Controller_Base
 			'order_by' => $order_by,
 		));
 		
-		$this->template->title = 'Category &raquo; Index';
+		$this->template->title = 'カテゴリー管理';
 		$this->template->content = View::forge('category/index', array(
 			'favorite_categories' => $favorite_categories,
 			'global_categories' => $global_categories,

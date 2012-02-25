@@ -106,8 +106,8 @@
               var err, errorHtml, _i, _len, _ref;
               if (((data != null ? data.success : void 0) != null) && data.success === true) {
                 calEvent.id = data.event.id;
-                calEvent.start = new Date(data.event.start);
-                calEvent.end = new Date(data.event.end);
+                calEvent.start = new Date(data.event.start.replace(/-/g, '/'));
+                calEvent.end = new Date(data.event.end.replace(/-/g, '/'));
                 calEvent.title = data.event.title;
                 calEvent.category = data.event.category;
                 calEvent.colorset = data.event.colorset;

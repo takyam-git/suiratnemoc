@@ -117,8 +117,8 @@ $(document).ready =>
           success: (data) ->
             if data?.success? && data.success is true
               calEvent.id = data.event.id;
-              calEvent.start = new Date(data.event.start)
-              calEvent.end = new Date(data.event.end)
+              calEvent.start = new Date(data.event.start.replace(/-/g, '/'))  #firefoxが - 区切りの日付はDateに変換できないので / に変える
+              calEvent.end = new Date(data.event.end.replace(/-/g, '/'))
               calEvent.title = data.event.title
               #calEvent.body = data.event.body
               calEvent.category = data.event.category

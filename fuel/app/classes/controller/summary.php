@@ -107,7 +107,7 @@ class Controller_Summary extends Controller_Base
 			$next_date = date('Y-m-d', mktime(0,0,0, $month, $day + 1, $year));
 		}
 		
-		$this->template->title = 'Summary &raquo; Index';
+		$this->template->title = 'サマリー';
 		$this->template->content = View::forge('summary/index', array(
 			'start_date' => $start_date,
 			'end_date' => $end_date,

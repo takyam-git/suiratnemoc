@@ -47,8 +47,8 @@ class Controller_Auth extends Controller_Base
 			}
 		}
 		
-		$this->template->title = 'Auth &raquo; Index';
-		$this->template->content = View::forge('auth/login', array('error_msg' => $error_msg));
+		$this->template->title = 'ログイン';
+		$this->template->content = View::forge('auth/login', array('error_msg' => $error_msg), false);
 	}
 	
 	public function action_logout(){

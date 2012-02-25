@@ -2,7 +2,7 @@
 <html lang="ja">
 	<head>
 		<meta charset="utf-8">
-		<title><?php echo $title; ?></title>
+		<title><?php echo $title; ?> :: すもっく！</title>
 		<meta name="description" content="">
 		<meta name="author" content="">
 
@@ -54,6 +54,7 @@
 					</a>
 					<a class="brand" href="/">すもっく！</a>
 					<div class="nav-collapse">
+						<?php if(isset($current_user) && $current_user){ ?>
 						<ul class="nav">
 							<li class="<?php echo strpos(Uri::string(), 'calendar') === 0 ? 'active' : '' ?>">
 								<?php echo Html::anchor('calendar', 'カレンダー');  ?>
@@ -65,12 +66,13 @@
 								<?php echo Html::anchor('summary', 'サマリー');  ?>
 							</li>
 						</ul>
+						<?php } ?>
 					</div><!--/.nav-collapse -->
 					<ul class="nav pull-right">
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<?php
-								if($current_user){
+								if(isset($current_user) && $current_user){
 									echo $current_user->username;
 								}else{
 									echo 'ゲスト';
