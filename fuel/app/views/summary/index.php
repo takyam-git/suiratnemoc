@@ -20,16 +20,26 @@
 			<a href="/summary/index/<?php echo $next_date; ?>" class="btn pull-right">次の日に移動</a>
 		</div>
 		<?php } ?>
+		<?php if(isset($sum)){ ?>
+			<p class="label label-info" style="font-size:24px;line-height:38px;padding-left:10px;">合計：<?php echo number_format($sum, 2); ?>&nbsp;時間</p>
+		<?php } ?>
 		<?php if(isset($events) && is_array($events)){ ?>
-		<h2><?php echo $title_date; ?>の全イベント</h2>
+		<div style="overflow:hidden;margin-bottom: 10px;">
+			<h2 class="pull-left"><?php echo $title_date; ?>の全イベント</h2>
+			<div class="pull-right">
+				<a class="btn btn-primary" href="/summary/event_csv<?php echo $csv_url_suffix; ?>"><i class="icon-th icon-white"></i> CSV形式で出力</a>
+				<!-- &nbsp;
+				<a class="btn btn-success" href="#"><i class="icon-envelope icon-white"></i> メール形式を取得</a> -->
+			</div>
+		</div>
 		<table class="table table-striped table-bordered table-condensed">
 			<thead>
 				<tr>
-					<th>開始時間</th>
-					<th>終了時間</th>
+					<th style="width:120px;">開始時間</th>
+					<th style="width:120px;">終了時間</th>
 					<th>カテゴリ</th>
 					<th>メモ</th>
-					<th>工数（時間）</th>
+					<th style="width:100px;">工数（時間）</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -37,32 +47,42 @@
 				<tr>
 					<td><?php echo date($summary_date_format, strtotime($event['start'])); ?></td>
 					<td><?php echo date($summary_date_format	, strtotime($event['end'])); ?></td>
-					<td><?php echo $event['category']['name']; ?></td>
-					<td><?php echo $event['title']; ?></td>
-					<td><?php echo $event['manhour'] ?></td>
+					<td><?php echo $event['name']; ?></td>
+					<td><?php echo preg_replace('/\r\n|\r|\n/', '<br />', $event['title']); ?></td>
+					<td style="text-align: right;"><?php echo number_format($event['sum'], 2) ?></td>
 				</tr>	
 			<?php } ?>
-				<tr>
-					<td colspan="4">合計</td>
-					<td><?php echo $sum; ?></td>
-				</tr>
 			</tbody>
 		</table>
 		<?php } ?>
+		<div class="pagination pagination-centered">
+			<ul>
+				<?php echo Pagination::prev_link('前へ'); ?>
+				<?php echo Pagination::page_links(); ?>
+				<?php echo Pagination::next_link('次へ'); ?>
+			</ul>
+		</div>
 		<?php if(isset($category_events) && is_array($category_events)){ ?>
-		<h2><?php echo $title_date; ?>のカテゴリ別工数</h2>
+		<div style="overflow:hidden;margin-bottom: 10px;">
+			<h2 class="pull-left"><?php echo $title_date; ?>のカテゴリ別工数</h2>
+			<div class="pull-right">
+				<a class="btn btn-primary" href="/summary/category_csv<?php echo $csv_url_suffix; ?>"><i class="icon-th icon-white"></i> CSV形式で出力</a>
+				<!-- &nbsp;
+				<a class="btn btn-success" href="#"><i class="icon-envelope icon-white"></i> メール形式を取得</a> -->
+			</div>
+		</div>
 		<table class="table table-striped table-bordered table-condensed">
 			<thead>
 				<tr>
 					<th>カテゴリ</th>
-					<th>工数（時間）</th>
+					<th style="width:100px;">工数（時間）</th>
 				</tr>
 			</thead>
 			<tbody>
 			<?php foreach($category_events as $category_event){ ?>
 				<tr>
-					<td><?php echo $category_event['category_name'] ?></td>
-					<td><?php echo $category_event['manhour']; ?></td>
+					<td><?php echo $category_event['name'] ?></td>
+					<td style="text-align: right;"><?php echo number_format($category_event['sum'], 2); ?></td>
 				</tr>
 			<?php } ?>
 			</tbody>

@@ -12,8 +12,7 @@ class Controller_Auth extends Controller_Base
 	}
 	
 	public function action_index(){
-		$this->template->title = 'Auth &raquo; Index';
-		$this->template->content = View::forge('auth/index');
+		Response::redirect('calendar');
 	}
 
 	public function action_login(){
