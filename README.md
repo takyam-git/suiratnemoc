@@ -56,12 +56,14 @@
 ##最初の管理者ユーザーの作り方
 * 新規登録からユーザーを作成する
 * コンソール上で、以下を実行
+
 	$ cd /path/to/suiratnemoc
 	$ php oil console
 	>>> $u = Model_User::find_by_username('your_username');
 	>>> $u->group = 100;
 	>>> $u->save();
 	>>> Ctrl+Cを押してエスケープ
+	
 * 管理者IDでログインすれば、メニューの「ユーザー」から他のユーザを管理者にしたりすることができます
 
 ##TODO
