@@ -9,7 +9,7 @@
     _this.$remove_end = $('#remove_end');
     _this.$error_box = $('#search_error');
     _this.$submit = $('#go_summary');
-    _this.base_url = '/summary/index/';
+    _this.base_url = _this.$submit.attr('href');
     _this.$error_box.hide();
     $('.datepicker').datepicker({
       dateFormat: 'yy-mm-dd',

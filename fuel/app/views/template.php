@@ -65,6 +65,11 @@
 							<li class="<?php echo strpos(Uri::string(), 'summary') === 0 ? 'active' : '' ?>">
 								<?php echo Html::anchor('summary', 'サマリー');  ?>
 							</li>
+							<?php if(isset($is_admin_user) && $is_admin_user === true){ ?>
+							<li class="<?php echo strpos(Uri::string(), 'user') === 0 ? 'active' : '' ?>">
+								<?php echo Html::anchor('user', 'ユーザー');  ?>
+							</li>
+							<?php } ?>
 						</ul>
 						<?php } ?>
 					</div><!--/.nav-collapse -->

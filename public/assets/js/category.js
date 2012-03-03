@@ -156,6 +156,7 @@
         name = $item.text().trim().htmldecode();
         colorSetID = parseInt($item.data('color'));
         include = parseInt($item.attr('data-include')) === 1;
+        $categoryDialogRemoveButton.show();
       } else {
         mode = 'add';
         titleSuffix = '追加';
@@ -164,6 +165,7 @@
         name = '';
         colorSetID = 0;
         include = false;
+        $categoryDialogRemoveButton.hide();
       }
       $categoryNameField.val(name);
       $categoryColorField.val(colorSetID);
@@ -201,7 +203,8 @@
           $categoryNameField.hide();
           $triggerButton.hide();
           $categoryDialogSaveButton.hide();
-          $categoryIncludeField.hide();
+          $categoryIncludeField.parent().hide();
+          $categoryDialogRemoveButton.hide();
         } else {
           $categoryNameScreen.hide();
           $categoryColorScreen.hide();
@@ -209,7 +212,7 @@
           $categoryNameField.show();
           $triggerButton.show();
           $categoryDialogSaveButton.show();
-          $categoryIncludeField.show();
+          $categoryIncludeField.parent().show();
         }
         $categoryDialogRemoveButton.off('click').on('click', function() {
           $removeCategoryError.html('').hide();

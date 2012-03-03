@@ -13,10 +13,18 @@ class Controller_Summary extends Controller_Base
 	/**
 	 * 共通処理
 	 */
-	private function init($date = null, $date2 = null){
+	private function init($date = null, $date2 = null, $user_mode = false){
+		
+		$user_mode = $this->is_admin_user && $user_mode;
+		
 		$uri_segment = 3;
+		
+		if($user_mode){
+			$uri_segment++;
+		}
+		
 		if(!is_null($date)){
-			$uri_segment = 4;
+			$uri_segment++;
 		}
 		
 		$end_date = null;
@@ -42,7 +50,13 @@ class Controller_Summary extends Controller_Base
 		
 		$is_multiple_days = false;
 		$title_date = $start_date;
-		$base_url = '/summary/index/' . $start_date;
+		
+		if($user_mode){
+			$base_url = '/summary/user/' . $this->current_user_id . '/';
+		}else{
+			$base_url = '/summary/index/';
+		}
+		$base_url = $base_url . $start_date;
 		$csv_url_suffix = '/' . $start_date;
 		$file_name = $start_date;
 		if(is_null($end_date)){
@@ -52,7 +66,7 @@ class Controller_Summary extends Controller_Base
 			$title_date .= ' ～ ' . $end_date;
 			$base_url .= '/' . $end_date;
 			$csv_url_suffix .= '/' . $end_date;
-			$uri_segment = 5;
+			$uri_segment++;
 			$file_name .= '_' . $end_date;
 		}
 		$file_name .= '.csv';
@@ -74,6 +88,24 @@ class Controller_Summary extends Controller_Base
 			$next_date = date('Y-m-d', mktime(0,0,0, $month, $day + 1, $year));
 		}
 		
+		$this->user_name = null;
+		if($user_mode){
+			$link_path = '/summary/user/' . $this->current_user_id . '/';
+			$event_csv_link_path = '/summary/user_event_csv/' . $this->current_user_id;
+			$category_csv_link_path = '/summary/user_category_csv/' . $this->current_user_id;
+			$user = Model_User::find_by_id($this->current_user_id);
+			if($user){
+				$this->user_name = $user->username;
+			}
+		}else{
+			$link_path = '/summary/index/';
+			$event_csv_link_path = '/summary/event_csv';
+			$category_csv_link_path = '/summary/category_csv';
+		}
+		
+		$this->category_csv_link_path = $category_csv_link_path;
+		$this->event_csv_link_path = $event_csv_link_path;
+		$this->link_path = $link_path;
 		$this->start_date = $start_date;
 		$this->start = $start;
 		$this->end_date = $end_date;
@@ -88,9 +120,9 @@ class Controller_Summary extends Controller_Base
 		$this->file_name = $file_name;
 	}
 
-	public function action_index($date = null, $date2 = null)
+	public function action_index($date = null, $date2 = null, $user_mode = false)
 	{
-		$this->init($date, $date2);
+		$this->init($date, $date2, $user_mode);
 		
 		$this->template->set_safe('optionScripts', Asset::js(array(
 			'summary.js',
@@ -114,7 +146,7 @@ class Controller_Summary extends Controller_Base
 		$pagination_config = array(
 			'total_items' => $count,
 			'pagination_url' => $this->base_url,
-			'per_page' => 10,
+			'per_page' => 20,
 			'num_links' => 4,
 			'uri_segment' => $this->uri_segment,
 		);
@@ -160,11 +192,39 @@ class Controller_Summary extends Controller_Base
 			'category_events' => $category_events,
 			'base_url' => $this->base_url,
 			'csv_url_suffix' => $this->csv_url_suffix,
+			'link_path' => $this->link_path,
+			'user_name' => $this->user_name,
+			'event_csv_link_path' => $this->event_csv_link_path,
+			'category_csv_link_path' => $this->category_csv_link_path,
 		));
 	}
+	
+	public function action_user($user_id, $date = null, $date2 = null){
+		if(!$this->is_admin_user){
+			Response::redirect('auth/login');
+		}
+		$this->current_user_id = intval($user_id);
+		$this->action_index($date, $date2, true);
+	}
+	
+	public function action_user_event_csv($user_id, $date = null, $date2 = null){
+		if(!$this->is_admin_user){
+			Response::redirect('auth/login');
+		}
+		$this->current_user_id = intval($user_id);
+		$this->action_event_csv($date, $date2, true);
+	}
 
-	public function action_event_csv($date = null, $date2 = null){
-		$this->init($date, $date2);
+	public function action_user_category_csv($user_id, $date = null, $date2 = null){
+		if(!$this->is_admin_user){
+			Response::redirect('auth/login');
+		}
+		$this->current_user_id = intval($user_id);
+		$this->action_category_csv($date, $date2, true);
+	}
+
+	public function action_event_csv($date = null, $date2 = null, $user_mode = false){
+		$this->init($date, $date2, $user_mode);
 		
 		$query = DB::select(
 				array('events.id', 'ID'),

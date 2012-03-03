@@ -51,7 +51,7 @@ return array(
 	'expire_on_close'	=> true,
 
 	// session expiration time, <= 0 means 2 years! (optional, default = 2 hours)
-	'expiration_time'	=> 7200,
+	'expiration_time'	=> 3600 * 12,
 
 	// session ID rotation time  (optional, default = 300)
 	'rotation_time'		=> 300,

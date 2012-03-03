@@ -7,7 +7,7 @@ $ =>
   @$error_box = $('#search_error')
   @$submit = $('#go_summary')
   
-  @base_url = '/summary/index/'
+  @base_url = @$submit.attr('href')
   
   @$error_box.hide()
   

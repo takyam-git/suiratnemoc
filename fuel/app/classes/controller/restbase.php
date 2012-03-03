@@ -11,7 +11,7 @@ class Controller_Restbase extends Controller_Rest{
 		// Set a global variable so views can use it
 		View::set_global('current_user', $this->current_user);
 		
-		$this->is_admin_user = Auth::member(100);
+		$this->is_admin_user = Auth::member(100) || Auth::member(99);
 		View::set_global('is_admin_user', $this->is_admin_user);
 		
 		$user_id = Auth::get_user_id();

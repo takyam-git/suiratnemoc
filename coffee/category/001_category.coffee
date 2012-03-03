@@ -186,6 +186,8 @@ $ =>
       colorSetID = parseInt($item.data('color'))
       include = parseInt($item.attr('data-include')) is 1
       
+      $categoryDialogRemoveButton.show()
+      
     else
       mode = 'add'
       titleSuffix = '追加'
@@ -195,6 +197,8 @@ $ =>
       name = ''
       colorSetID = 0
       include = false
+      
+      $categoryDialogRemoveButton.hide()
     
     #ダイアログの各フィールドを更新
     $categoryNameField.val(name)
@@ -241,7 +245,8 @@ $ =>
         $categoryNameField.hide()
         $triggerButton.hide()
         $categoryDialogSaveButton.hide()
-        $categoryIncludeField.hide()
+        $categoryIncludeField.parent().hide()
+        $categoryDialogRemoveButton.hide()
       else
         $categoryNameScreen.hide()
         $categoryColorScreen.hide()
@@ -249,7 +254,7 @@ $ =>
         $categoryNameField.show()
         $triggerButton.show()
         $categoryDialogSaveButton.show()
-        $categoryIncludeField.show()
+        $categoryIncludeField.parent().show()
       
       #カテゴリの削除
       $categoryDialogRemoveButton.off('click').on('click', ->

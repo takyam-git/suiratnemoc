@@ -60,7 +60,8 @@ return array(
 		0    => array('name' => 'Guests', 'roles' => array()),
 		1    => array('name' => 'Users', 'roles' => array('user')),
 		50   => array('name' => 'Moderators', 'roles' => array('user', 'moderator')),
-		100  => array('name' => 'Administrators', 'roles' => array('user', 'moderator', 'admin')),
+		99   => array('name' => 'Administrators', 'roles' => array('user', 'moderator', 'admin')),
+		100  => array('name' => 'Superusers', 'roles' => array('user', 'moderator', 'admin', 'super')),
 	),
 
 	/**

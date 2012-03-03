@@ -1,15 +1,19 @@
 <?php
 
-class Controller_Base extends Controller_Template {
+class Controller_Adminbase extends Controller_Template {
 
 	public function before()
 	{
 		parent::before();
 		
+		if (!Auth::check() || (!Auth::member(100) && !Auth::member(99))){
+			Response::redirect('auth/login');
+		}
+		
 		// Assign current_user to the instance so controllers can use it
 		$this->current_user = Auth::check() ? Model_User::find_by_username(Auth::get_screen_name()) : null;
 		
-		$this->is_admin_user = Auth::member(100) || Auth::member(99);
+		$this->is_admin_user = true;
 		View::set_global('is_admin_user', $this->is_admin_user);
 		
 		$user_id = Auth::get_user_id();
