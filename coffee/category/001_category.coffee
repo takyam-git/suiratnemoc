@@ -198,13 +198,14 @@ $ =>
       colorSetID = 0
       include = false
       
+      $categoryIncludeField.removeAttr('checked')
       $categoryDialogRemoveButton.hide()
     
     #ダイアログの各フィールドを更新
     $categoryNameField.val(name)
     $categoryColorField.val(colorSetID)
     
-    if include
+    if include or mode is 'add'
       $categoryIncludeField.removeAttr('checked')
     else
       $categoryIncludeField.attr('checked', true)

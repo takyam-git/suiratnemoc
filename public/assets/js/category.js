@@ -165,11 +165,12 @@
         name = '';
         colorSetID = 0;
         include = false;
+        $categoryIncludeField.removeAttr('checked');
         $categoryDialogRemoveButton.hide();
       }
       $categoryNameField.val(name);
       $categoryColorField.val(colorSetID);
-      if (include) {
+      if (include || mode === 'add') {
         $categoryIncludeField.removeAttr('checked');
       } else {
         $categoryIncludeField.attr('checked', true);
