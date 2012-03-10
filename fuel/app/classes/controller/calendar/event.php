@@ -6,7 +6,7 @@ class Controller_Calendar_Event extends Controller_Restbase{
 			$data['error'] = 'can\'t get user id';
 		}else{
 			
-			$query = Model_Event::find()->where('userid', $this->current_user_id)->related('category')->limit(500);
+			$query = Model_Event::find()->where('userid', $this->current_user_id)->related('category');
 			
 			$start = strtotime(Input::post('start'));
 			$end = strtotime(Input::post('end'));
@@ -61,6 +61,30 @@ class Controller_Calendar_Event extends Controller_Restbase{
 			
 			if($start && $end && $start > $end){
 				$data['errors'][] = '開始時間が終了時間より遅い時間に設定されています';
+			}
+			
+			if($start && $end){
+				//重複する時刻のデータがないかバリデる
+				$query = Model_Event::find()->where('userid', $this->current_user_id)->related('category');
+				$query = DB::select(
+					DB::expr('count(*) AS count')
+				)
+				->from('events')
+				->where('userid', $this->current_user_id)
+				->where('start', '<', date('Y-m-d H:i:s', $end))
+				->where('end', '>', date('Y-m-d H:i:s', $start));
+				
+				if(Input::post('event_id')){
+					$query->where('id', '<>', Input::post('event_id'));
+				}
+				
+				$events = $query->execute()->as_array();
+				
+				if(is_array($events) && isset($events[0])
+					&& isset($events[0]['count'])
+					&& intval($events[0]['count']) > 0){
+					$data['errors'][] = '期間が重複しています';
+				}
 			}
 			
 			if($val->run() && count($data['errors']) === 0){

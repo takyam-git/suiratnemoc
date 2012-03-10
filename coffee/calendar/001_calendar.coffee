@@ -97,8 +97,14 @@ $(document).ready =>
         false
       )
       
-      
+      saveButtonProcessing = false #簡易連投防止
       @$saveButton.off('click').on('click', ->
+        #簡易連投防止
+        if saveButtonProcessing is true
+          return false
+        #簡易連投防止
+        saveButtonProcessing = true
+        
         $errorField.html('').hide()
         
         post_data = {
@@ -134,6 +140,10 @@ $(document).ready =>
                 for err in data.errors
                   errorHtml += '<p>' + err + '</p>'
                 $errorField.html(errorHtml).show()
+          complete: ->
+            #簡易連投防止
+            saveButtonProcessing = false
+            
         })
         
         false

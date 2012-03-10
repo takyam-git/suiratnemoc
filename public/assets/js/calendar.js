@@ -43,7 +43,7 @@
       $removeCategoryDoButton = $('#categoryDialogRemoveDoButton', $removeCategoryDialog);
       $removeCategoryError = $('#removeCategoryDialogError', $removeCategoryDialog);
       $dialogContent.off('shown').off('hidden').on('shown', function() {
-        var isNewEvent;
+        var isNewEvent, saveButtonProcessing;
         $errorField.html('').hide();
         isNewEvent = !((calEvent.id != null) && parseInt(calEvent.id) > 0);
         if (isNewEvent) {
@@ -88,8 +88,11 @@
           }).on('hidden', function() {}).modal();
           return false;
         });
+        saveButtonProcessing = false;
         return _this.$saveButton.off('click').on('click', function() {
           var post_data;
+          if (saveButtonProcessing === true) return false;
+          saveButtonProcessing = true;
           $errorField.html('').hide();
           post_data = {
             event_id: calEvent.id,
@@ -126,6 +129,9 @@
                   return $errorField.html(errorHtml).show();
                 }
               }
+            },
+            complete: function() {
+              return saveButtonProcessing = false;
             }
           });
           return false;
